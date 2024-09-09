@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorizing the Prokudin-Gorskii Photo Collection</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .header h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 48px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+        .header h3 {
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+            font-size: 30px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .background-images {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        .background-images img {
+            max-width: auto;
+            height: 30em;
+        }
+        .approach-images {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+            gap: 0px;
+        }
+        .approach-images img {
+            max-width: auto;
+            height: 40em;
+        }
+        .caption {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .table {
+            width: auto; /* Adjust the table width to fit its content */
+            margin: 0 auto; /* Centers the table horizontally */
+            border-collapse: collapse;
+            border-spacing: 10px 0; /* Adds a 10px gap between columns, no gap between rows */
+        }
+
+        .td {
+            border: 1px solid #ccc;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            gap: 0px;
+            margin-bottom: 0px;
+        }
+
+        .image-container img {
+            height: 20.4em; /* Ensure the images are of the same height */
+        }
+
+        .mini-table {
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 12px; /* Set smaller font size for mini-table */
+        }
+
+        .mini-table th, .mini-table td {
+            padding: 5px 0px;
+            border: 1px solid #ccc;
+        }
+
+        .mini-table th {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Colorizing the Prokudin-Gorskii Photo Collection</h1>
+        <h3>Alec Thompson</h3>
+        <img src="media/websiteoutput/icon.jpg" alt="Prokudin-Gorskii Collection">
+    </div>
+
+    <div class="container">
+        <!-- Background section -->
+        <div class="section">
+            <h2>Background</h2>
+            <p>
+                Sergei Mikhailovich Prokudin-Gorskii (1863-1944) [Сергей Михайлович Прокудин-Горский, to his Russian friends] was a man well ahead of his time. 
+                Convinced, as early as 1907, that color photography was the wave of the future, he won Tzar's special permission to travel across the vast Russian Empire 
+                and take color photographs of everything he saw including the only color portrait of Leo Tolstoy. And he really photographed everything: people, buildings, 
+                landscapes, railroads, bridges... thousands of color pictures! His idea was simple: record three exposures of every scene onto a glass plate using a red, 
+                a green, and a blue filter. Never mind that there was no way to print color photographs until much later -- he envisioned special projectors to be installed 
+                in "multimedia" classrooms all across Russia where the children would be able to learn about their vast country. 
+                Alas, his plans never materialized: he left Russia in 1918, right after the revolution, never to return again. Luckily, his RGB glass plate negatives, 
+                capturing the last years of the Russian Empire, survived and were purchased in 1948 by the Library of Congress. 
+                The LoC has recently digitized the negatives and made them available on-line.
+            </p>
+            <p>
+                The goal of this project is to take the digitized Prokudin-Gorskii glass plate images and, using image processing techniques, automatically produce 
+                a color image with as few visual artifacts as possible. We will extract the three color channel images, place them on top of each other, and align them 
+                so that they form a single RGB color image.
+            </p>
+            <!-- Examples of glass plates -->
+            <div class="background-images">
+                <img src="media/websiteinput/onion_church.jpg" alt="Example Glass Plate 1">
+                <img src="media/websiteinput/harvesters.jpg" alt="Example Glass Plate 2">
+                <img src="media/websiteinput/lady.jpg" alt="Example Glass Plate 3">
+                <img src="media/websiteinput/cathedral.jpg" alt="Example Glass Plate 4">
+            </div>
+            <div class="caption">Examples of Prokudin-Gorskii's glass plates</div>
+        </div>
+
+        <!-- Approach section -->
+        <div class="section">
+            <h2>Approach</h2>
+            <p>
+                To reconstruct the images, we first separate the digitized glass plates into their red, green, and blue channels. Each channel captures the light passing  through a different filter during the original exposure.  We match the green and red images to the blue image, and then place all of the images on top of one another to re-create the color photograph.
+            </p>
+            <p>
+                I used the Normalized Cross-Correlation (NCC) metric to evaluate how closely two images matched with one another.  This is the dot product between two normalized vectors: (image1./||image1|| and image2./||image2||).  
+                To reduce noise, I cropped the images by 5% on each side to remove the black and white borders.  This prevented the borders from impacting the NCC metric.
+            </p>
+            <p>
+                For small images, I exhaustively searched over a 30 by 30 window of possible displacements, and scored each one using the NCC metric, choosing the displacement with the highest score.  
+            </p>
+            <p>
+                However, this solution became prohibitively expensive when faced with larger images.  Larger images have much larger pixel displacements and more pixels, making my program far too slow.  
+            </p>
+            <p>
+                To solve this problem, I employed an image pyramid.  The image pyramid first shrinks down both images to about 30 pixels wide, and then calculates the optimal displacement on the shrunken images.  We then scale both images up by a factor of 2 and double the optimal displacement.  This recursive process continues until we reach the full size image.   Thanks to the scaling factor, we only have to check the closest +/- 3 displacements at each stage of the pyramid, making our runtime several orders of magnitude faster.
+            </p>
+
+            <div class="approach-images">
+                <img src="media/websiteinput/self_portrait.jpg" alt="Original Glass Plate">
+                <img src="media/websiteoutput/self_portrait.jpg" alt="Reconstructed Image">
+            </div>
+            <div class="caption">Self portrait of Prokudin-Gorskii.  Left is the original glass plate.  Right is the reconstructed color image.</div>
+        </div>
+
+        <!-- Results section -->
+        <div class="section">
+            <h2>Results</h2>
+            <table>
+                <!-- Row 1 -->
+                <tr>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/cathedral.jpg" alt="Cathedral plates">
+                            <img src="media/websiteoutput/cathedral.jpg" alt="Reconstructed cathedral image">
+                        </div>
+                        <p class="caption">Cathedral </p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>5</td>
+                                <td>3</td>
+                                <td>12</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/church.jpg" alt="Church plates">
+                            <img src="media/websiteoutput/church.jpg" alt="Reconstructed church image">
+                        </div>
+                        <p class="caption">Church</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>-12</td>
+                                <td>24</td>
+                                <td>-5</td>
+                                <td>58</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/emir.jpg" alt="Emir plates">
+                            <img src="media/websiteoutput/emir.jpg" alt="Reconstructed emir image">
+                        </div>
+                        <p class="caption">Emir</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>24</td>
+                                <td>49</td>
+                                <td>55</td>
+                                <td>104</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                
+                <!-- Row 2 -->
+                <tr>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/harvesters.jpg" alt="Harvesters plates">
+                            <img src="media/websiteoutput/harvesters.jpg" alt="Reconstructed harvesters image">
+                        </div>
+                        <p class="caption">Harvesters</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>16</td>
+                                <td>60</td>
+                                <td>14</td>
+                                <td>124</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/icon.jpg" alt="Icon plates">
+                            <img src="media/websiteoutput/icon.jpg" alt="Reconstructed icon image">
+                        </div>
+                        <p class="caption">Icon</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>17</td>
+                                <td>40</td>
+                                <td>23</td>
+                                <td>89</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/lady.jpg" alt="Lady plates">
+                            <img src="media/websiteoutput/lady.jpg" alt="Reconstructed lady image">
+                        </div>
+                        <p class="caption">Lady</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>55</td>
+                                <td>12</td>
+                                <td>110</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                
+                <!-- Row 3 -->
+                <tr>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/melons.jpg" alt="Melons plates">
+                            <img src="media/websiteoutput/melons.jpg" alt="Reconstructed melons image">
+                        </div>
+                        <p class="caption">Melons</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>82</td>
+                                <td>11</td>
+                                <td>177</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/monastery.jpg" alt="Monastery plates">
+                            <img src="media/websiteoutput/monastery.jpg" alt="Reconstructed monastery image">
+                        </div>
+                        <p class="caption">Monastery</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>-3</td>
+                                <td>2</td>
+                                <td>3</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/onion_church.jpg" alt="Onion church plates">
+                            <img src="media/websiteoutput/onion_church.jpg" alt="Reconstructed onion church image">
+                        </div>
+                        <p class="caption">Onion Church</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>26</td>
+                                <td>51</td>
+                                <td>36</td>
+                                <td>108</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+        
+                <!-- Row 4 -->
+                <tr>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/sculpture.jpg" alt="Sculpture plates">
+                            <img src="media/websiteoutput/sculpture.jpg" alt="Reconstructed sculpture image">
+                        </div>
+                        <p class="caption">Sculpture</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>-11</td>
+                                <td>33</td>
+                                <td>-26</td>
+                                <td>140</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/self_portrait.jpg" alt="Self portrait plates">
+                            <img src="media/websiteoutput/self_portrait.jpg" alt="Reconstructed self portrait image">
+                        </div>
+                        <p class="caption">Self Portrait</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>29</td>
+                                <td>79</td>
+                                <td>34</td>
+                                <td>175</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/three_generations.jpg" alt="Three generations plates">
+                            <img src="media/websiteoutput/three_generations.jpg" alt="Reconstructed three generations image">
+                        </div>
+                        <p class="caption">Three Generations</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td>55</td>
+                                <td>10</td>
+                                <td>112</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Row 5 -->
+                <tr>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/tobolsk.jpg" alt="Tobolsk plates">
+                            <img src="media/websiteoutput/tobolsk.jpg" alt="Reconstructed tobolsk image">
+                        </div>
+                        <p class="caption">Tobolsk</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>6</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <div class="image-container">
+                            <img src="media/websiteinput/train.jpg" alt="Train plates">
+                            <img src="media/websiteoutput/train.jpg" alt="Reconstructed train image">
+                        </div>
+                        <p class="caption">Train</p>
+                        <!-- Mini Table -->
+                        <table class="mini-table">
+                            <tr>
+                                <th>Green dx</th>
+                                <th>Green dy</th>
+                                <th>Red dx</th>
+                                <th>Red dy</th>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>42</td>
+                                <td>32</td>
+                                <td>87</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
