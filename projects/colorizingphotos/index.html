@@ -165,20 +165,17 @@
         <div class="section">
             <h2>Approach</h2>
             <p>
-                To reconstruct the images, we first separate the digitized glass plates into their red, green, and blue channels. Each channel captures the light passing  through a different filter during the original exposure.  We match the green and red images to the blue image, and then place all of the images on top of one another to re-create the color photograph.
+                To reconstruct the images, we begin by separating the digitized glass plates into their red, green, and blue channels. Each channel captures light through a different filter during the original exposure.  We match the green and red images to the blue image, and then place all of the images on top of one another to re-create the color photograph.
             </p>
             <p>
-                I used the Normalized Cross-Correlation (NCC) metric to evaluate how closely two images matched with one another.  This is the dot product between two normalized vectors: (image1./||image1|| and image2./||image2||).  
-                To reduce noise, I cropped the images by 5% on each side to remove the black and white borders.  This prevented the borders from impacting the NCC metric.
+                To align the channels accurately, I used the Normalized Cross-Correlation (NCC) metric, which evaluates how closely two images match. NCC is calculated as the dot product between two normalized vectors: one representing the normalized values of the first image (image1./||image1||) and the other for the second image (image2./||image2||). The closer the vectors, the better the alignment.
+                To avoid introducing noise into the alignment process, I cropped the images by 5% on each side. This step removed the black and white borders typically present in the glass plates, ensuring that these borders didn’t skew the NCC metric.
             </p>
             <p>
-                For small images, I exhaustively searched over a 30 by 30 window of possible displacements, and scored each one using the NCC metric, choosing the displacement with the highest score.  
+                For smaller images, I performed an exhaustive search over a 30x30 window of possible displacements. I evaluated each possible displacement using the NCC metric and selected the displacement with the highest score for the best alignment. However, for larger images, this method became computationally expensive. Larger images not only have more pixels but also require larger displacements, slowing down the alignment process significantly.
             </p>
             <p>
-                However, this solution became prohibitively expensive when faced with larger images.  Larger images have much larger pixel displacements and more pixels, making my program far too slow.  
-            </p>
-            <p>
-                To solve this problem, I employed an image pyramid.  The image pyramid first shrinks down both images to about 30 pixels wide, and then calculates the optimal displacement on the shrunken images.  We then scale both images up by a factor of 2 and double the optimal displacement.  This recursive process continues until we reach the full size image.   Thanks to the scaling factor, we only have to check the closest +/- 3 displacements at each stage of the pyramid, making our runtime several orders of magnitude faster.
+                To solve this problem, I employed an image pyramid.  The image pyramid starts by determining how many levels of scaling (or pyramid layers) are needed to go from a 30 pixel wide image to the full size one, doubling the image size each time. It then iteratively aligns the images from the smallest scale to the original size. For each level, it rescales both images and computes the optimal displacement (shift in x and y directions) between them. This optimal displacement is then scaled up as the function moves to higher-resolution levels. At each stage of the pyramid, we only need to check displacements within a small range of +/- 3. By starting alignment at a coarse scale and refining it at progressively higher resolutions, the pyramid approach efficiently handles larger displacements, speeding up the alignment process.
             </p>
 
             <div class="approach-images">
