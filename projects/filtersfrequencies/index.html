@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun With Filters and Frequencies!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2, h3, h4 {
+            color: #333;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+        }
+        h2 {
+            font-size: 2em;
+        }
+        h3 {
+            font-size: 1.75em;
+        }
+        h4 {
+            font-size: 1.5em;
+        }
+        .author {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fun With Filters and Frequencies!</h1>
+    <p class="author">By Alec Thompson</p>
+
+    <h2>Fun With Filters</h2>
+
+    <h3>Finite Difference Operator</h3>
+    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+
+    <table>
+        <tr>
+            <td><img src="original_image.jpg" alt="Original Image"></td>
+            <td><img src="gradient_x.jpg" alt="Gradient X Image"></td>
+            <td><img src="gradient_y.jpg" alt="Gradient Y Image"></td>
+            <td><img src="gradient_magnitude.jpg" alt="Gradient Magnitude Image"></td>
+            <td><img src="edge_image.jpg" alt="Edge Image"></td>
+        </tr>
+    </table>
+
+    <h3>Derivative of Gaussian (DoG) Filter</h3>
+    <table>
+        <tr>
+            <td><img src="dog_1.jpg" alt="DoG Image 1"></td>
+            <td><img src="dog_2.jpg" alt="DoG Image 2"></td>
+            <td><img src="dog_3.jpg" alt="DoG Image 3"></td>
+            <td><img src="dog_4.jpg" alt="DoG Image 4"></td>
+            <td><img src="dog_5.jpg" alt="DoG Image 5"></td>
+        </tr>
+        <tr>
+            <td><img src="dog_6.jpg" alt="DoG Image 6"></td>
+            <td><img src="dog_7.jpg" alt="DoG Image 7"></td>
+            <td><img src="dog_8.jpg" alt="DoG Image 8"></td>
+            <td><img src="dog_9.jpg" alt="DoG Image 9"></td>
+            <td><img src="dog_10.jpg" alt="DoG Image 10"></td>
+        </tr>
+    </table>
+
+    <h2>Fun With Frequencies</h2>
+
+    <h3>Image "Sharpening"</h3>
+
+    <h4>Taj Mahal Image</h4>
+    <table>
+        <tr>
+            <td><img src="taj_original.jpg" alt="Taj Mahal Original"></td>
+            <td><img src="taj_sharp1.jpg" alt="Taj Mahal Sharpened 1"></td>
+            <td><img src="taj_sharp2.jpg" alt="Taj Mahal Sharpened 2"></td>
+        </tr>
+        <tr>
+            <td>Alpha: 0</td>
+            <td>Alpha: 0.5</td>
+            <td>Alpha: 1.0</td>
+        </tr>
+        <tr>
+            <td><img src="taj_sharp3.jpg" alt="Taj Mahal Sharpened 3"></td>
+            <td><img src="taj_sharp4.jpg" alt="Taj Mahal Sharpened 4"></td>
+            <td><img src="taj_sharp5.jpg" alt="Taj Mahal Sharpened 5"></td>
+        </tr>
+        <tr>
+            <td>Alpha: 1.5</td>
+            <td>Alpha: 2.0</td>
+            <td>Alpha: 2.5</td>
+        </tr>
+    </table>
+<body>
+    <h1>Fun With Filters and Frequencies!</h1>
+    <p>By Alec Thompson</p>
+
+    <h2>Fun With Filters</h2>
+
+    <h3>Finite Difference Operator</h3>
+
+    <h4>Approach</h4>
+    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+
+    <table>
+        <tr>
+            <td><img src="original_image.jpg" alt="Original Image"></td>
+            <td><img src="gradient_x.jpg" alt="Gradient X Image"></td>
+            <td><img src="gradient_y.jpg" alt="Gradient Y Image"></td>
+            <td><img src="gradient_magnitude.jpg" alt="Gradient Magnitude Image"></td>
+            <td><img src="edge_image.jpg" alt="Edge Image"></td>
+        </tr>
+    </table>
+
+    <h3>Derivative of Gaussian (DoG) Filter</h3>
+
+    <h4>Approach</h4>
+    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+
+    <table>
+        <tr>
+            <td><img src="dog_1.jpg" alt="DoG Image 1"></td>
+            <td><img src="dog_2.jpg" alt="DoG Image 2"></td>
+            <td><img src="dog_3.jpg" alt="DoG Image 3"></td>
+            <td><img src="dog_4.jpg" alt="DoG Image 4"></td>
+            <td><img src="dog_5.jpg" alt="DoG Image 5"></td>
+        </tr>
+        <tr>
+            <td><img src="dog_6.jpg" alt="DoG Image 6"></td>
+            <td><img src="dog_7.jpg" alt="DoG Image 7"></td>
+            <td><img src="dog_8.jpg" alt="DoG Image 8"></td>
+            <td><img src="dog_9.jpg" alt="DoG Image 9"></td>
+            <td><img src="dog_10.jpg" alt="DoG Image 10"></td>
+        </tr>
+    </table>
+
+    <h2>Fun With Frequencies</h2>
+
+    <h3>Image "Sharpening"</h3>
+
+    <h4>Approach</h4>
+    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+
+    <h4>Taj Mahal Image</h4>
+    <table>
+        <tr>
+            <td><img src="taj_original.jpg" alt="Taj Mahal Original"></td>
+            <td><img src="taj_sharp1.jpg" alt="Taj Mahal Sharpened 1"></td>
+            <td><img src="taj_sharp2.jpg" alt="Taj Mahal Sharpened 2"></td>
+        </tr>
+        <tr>
+            <td>Alpha: 0</td>
+            <td>Alpha: 0.5</td>
+            <td>Alpha: 1.0</td>
+        </tr>
+        <tr>
+            <td><img src="taj_sharp3.jpg" alt="Taj Mahal Sharpened 3"></td>
+            <td><img src="taj_sharp4.jpg" alt="Taj Mahal Sharpened 4"></td>
+            <td><img src="taj_sharp5.jpg" alt="Taj Mahal Sharpened 5"></td>
+        </tr>
+        <tr>
+            <td>Alpha: 1.5</td>
+            <td>Alpha: 2.0</td>
+            <td>Alpha: 2.5</td>
+        </tr>
+    </table>
+
+    <h4>Buddha Image</h4>
+    <table>
+        <tr>
+            <td><img src="buddha_original.jpg" alt="Buddha Original"></td>
+            <td><img src="buddha_sharp1.jpg" alt="Buddha Sharpened 1"></td>
+            <td><img src="buddha_sharp2.jpg" alt="Buddha Sharpened 2"></td>
+        </tr>
+        <tr>
+            <td>Alpha: 0</td>
+            <td>Alpha: 0.5</td>
+            <td>Alpha: 1.0</td>
+        </tr>
+        <tr>
+            <td><img src="buddha_sharp3.jpg" alt="Buddha Sharpened 3"></td>
+            <td><img src="buddha_sharp4.jpg" alt="Buddha Sharpened 4"></td>
+            <td><img src="buddha_sharp5.jpg" alt="Buddha Sharpened 5"></td>
+        </tr>
+        <tr>
+            <td>Alpha: 1.5</td>
+            <td>Alpha: 2.0</td>
+            <td>Alpha: 2.5</td>
+        </tr>
+    </table>
+
+    <h4>Cactus Image</h4>
+    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+
+    <table>
+        <tr>
+            <td><img src="cactus_original.jpg" alt="Cactus Original"></td>
+            <td><img src="cactus_blurred.jpg" alt="Cactus Blurred"></td>
+            <td><img src="cactus_blurred_sharpened.jpg" alt="Cactus Blurred and Sharpened"></td>
+        </tr>
+    </table>
+
+    <h3>Hybrid Images</h3>
+    <h4>Approach</h4>
+    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+
+    <h4>Derek and Nutmeg Grayscale Hybrid</h4>
+    <table>
+        <tr>
+            <td><img src="derek_original.jpg" alt="Derek Original"></td>
+            <td><img src="nutmeg_original.jpg" alt="Nutmeg Original"></td>
+            <td><img src="derek_lowpass.jpg" alt="Derek Low Pass"></td>
+            <td><img src="nutmeg_highpass.jpg" alt="Nutmeg High Pass"></td>
+            <td><img src="derek_nutmeg_hybrid.jpg" alt="Derek Nutmeg Hybrid"></td>
+        </tr>
+        <tr>
+            <td><img src="derek_ft.jpg" alt="Derek Fourier Transform"></td>
+            <td><img src="nutmeg_ft.jpg" alt="Nutmeg Fourier Transform"></td>
+            <td><img src="derek_lowpass_ft.jpg" alt="Derek Low Pass FT"></td>
+            <td><img src="nutmeg_highpass_ft.jpg" alt="Nutmeg High Pass FT"></td>
+            <td><img src="derek_nutmeg_hybrid_ft.jpg" alt="Derek Nutmeg Hybrid FT"></td>
+        </tr>
+    </table>
+
+    <h4>Derek and Nutmeg RGB Hybrid</h4>
+    <table>
+        <tr>
+            <td><img src="derek_original_rgb.jpg" alt="Derek Original RGB"></td>
+            <td><img src="nutmeg_original_rgb.jpg" alt="Nutmeg Original RGB"></td>
+            <td><img src="derek_lowpass_rgb.jpg" alt="Derek Low Pass RGB"></td>
+            <td><img src="nutmeg_highpass_rgb.jpg" alt="Nutmeg High Pass RGB"></td>
+            <td><img src="derek_nutmeg_hybrid_rgb.jpg" alt="Derek Nutmeg Hybrid RGB"></td>
+        </tr>
+        <tr>
+            <td><img src="derek_ft_rgb.jpg" alt="Derek Fourier Transform RGB"></td>
+            <td><img src="nutmeg_ft_rgb.jpg" alt="Nutmeg Fourier Transform RGB"></td>
+            <td><img src="derek_lowpass_ft_rgb.jpg" alt="Derek Low Pass FT RGB"></td>
+            <td><img src="nutmeg_highpass_ft_rgb.jpg" alt="Nutmeg High Pass FT RGB"></td>
+            <td><img src="derek_nutmeg_hybrid_ft_rgb.jpg" alt="Derek Nutmeg Hybrid FT RGB"></td>
+        </tr>
+    </table>
+
+    <h4>Another Two Image RGB Hybrid</h4>
+    <table>
+        <tr>
+            <td><img src="image1_original.jpg" alt="Image 1 Original"></td>
+            <td><img src="image2_original.jpg" alt="Image 2 Original"></td>
+            <td><img src="image1_lowpass.jpg" alt="Image 1 Low Pass"></td>
+            <td><img src="image2_highpass.jpg" alt="Image 2 High Pass"></td>
+            <td><img src="image1_image2_hybrid.jpg" alt="Image 1 and 2 Hybrid"></td>
+        </tr>
+        <tr>
+            <td><img src="image1_ft.jpg" alt="Image 1 Fourier Transform"></td>
+            <td><img src="image2_ft.jpg" alt="Image 2 Fourier Transform"></td>
+            <td><img src="image1_lowpass_ft.jpg" alt="Image 1 Low Pass FT"></td>
+            <td><img src="image2_highpass_ft.jpg" alt="Image 2 High Pass FT"></td>
+            <td><img src="image1_image2_hybrid_ft.jpg" alt="Image 1 and 2 Hybrid FT"></td>
+        </tr>
+    </table>
+
+    <h4>Hybrid Image Failure</h4>
+    <table>
+        <tr>
+            <td><img src="failure1_original.jpg" alt="Failure 1 Original"></td>
+            <td><img src="failure2_original.jpg" alt="Failure 2 Original"></td>
+            <td><img src="failure1_lowpass.jpg" alt="Failure 1 Low Pass"></td>
+            <td><img src="failure2_highpass.jpg" alt="Failure 2 High Pass"></td>
+            <td><img src="failure_hybrid.jpg" alt="Failure Hybrid"></td>
+        </tr>
+        <tr>
+            <td><img src="failure1_ft.jpg" alt="Failure 1 Fourier Transform"></td>
+            <td><img src="failure2_ft.jpg" alt="Failure 2 Fourier Transform"></td>
+            <td><img src="failure1_lowpass_ft.jpg" alt="Failure 1 Low Pass FT"></td>
+            <td><img src="failure2_highpass_ft.jpg" alt="Failure 2 High Pass FT"></td>
+            <td><img src="failure_hybrid_ft.jpg" alt="Failure Hybrid FT"></td>
+        </tr>
+    </table>
+
+    <h3>Gaussian and Laplacian Stacks</h3>
+
+    <h4>Approach</h4>
+    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+
+    <h4>Apples and Oranges</h4>
+
+    <table>
+        <tr>
+            <th>Level 0</th>
+            <th>Level 1</th>
+            <th>Level 2</th>
+            <th>Level 3</th>
+            <th>Level 4</th>
+        </tr>
+        <tr>
+            <td>Apple Gaussian</td>
+            <td><img src="apple_gaussian_0.jpg" alt="Apple Gaussian 0"></td>
+            <td><img src="apple_gaussian_1.jpg" alt="Apple Gaussian 1"></td>
+            <td><img src="apple_gaussian_2.jpg" alt="Apple Gaussian 2"></td>
+            <td><img src="apple_gaussian_3.jpg" alt="Apple Gaussian 3"></td>
+        </tr>
+        <tr>
+            <td>Apple Laplacian</td>
+            <td><img src="apple_laplacian_0.jpg" alt="Apple Laplacian 0"></td>
+            <td><img src="apple_laplacian_1.jpg" alt="Apple Laplacian 1"></td>
+            <td><img src="apple_laplacian_2.jpg" alt="Apple Laplacian 2"></td>
+            <td><img src="apple_laplacian_3.jpg" alt="Apple Laplacian 3"></td>
+        </tr>
+        <tr>
+            <td>Orange Gaussian</td>
+            <td><img src="orange_gaussian_0.jpg" alt="Orange Gaussian 0"></td>
+            <td><img src="orange_gaussian_1.jpg" alt="Orange Gaussian 1"></td>
+            <td><img src="orange_gaussian_2.jpg" alt="Orange Gaussian 2"></td>
+            <td><img src="orange_gaussian_3.jpg" alt="Orange Gaussian 3"></td>
+        </tr>
+        <tr>
+            <td>Orange Laplacian</td>
+            <td><img src="orange_laplacian_0.jpg" alt="Orange Laplacian 0"></td>
+            <td><img src="orange_laplacian_1.jpg" alt="Orange Laplacian 1"></td>
+            <td><img src="orange_laplacian_2.jpg" alt="Orange Laplacian 2"></td>
+            <td><img src="orange_laplacian_3.jpg" alt="Orange Laplacian 3"></td>
+        </tr>
+    </table>
+
+    <h3>Multiresolution Blending</h3>
+
+    <h4>Approach</h4>
+    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+
+    <h4>Oraple</h4>
+    <table>
+        <tr>
+            <th>Level 0</th>
+            <th>Level 1</th>
+            <th>Level 2</th>
+            <th>Level 3</th>
+            <th>Level 4</th>
+        </tr>
+        <tr>
+            <td>Apple Mask</td>
+            <td><img src="apple_mask_0.jpg" alt="Apple Mask 0"></td>
+            <td><img src="apple_mask_1.jpg" alt="Apple Mask 1"></td>
+            <td><img src="apple_mask_2.jpg" alt="Apple Mask 2"></td>
+            <td><img src="apple_mask_3.jpg" alt="Apple Mask 3"></td>
+        </tr>
+        <tr>
+            <td>Orange Mask</td>
+            <td><img src="orange_mask_0.jpg" alt="Orange Mask 0"></td>
+            <td><img src="orange_mask_1.jpg" alt="Orange Mask 1"></td>
+            <td><img src="orange_mask_2.jpg" alt="Orange Mask 2"></td>
+            <td><img src="orange_mask_3.jpg" alt="Orange Mask 3"></td>
+        </tr>
+        <tr>
+            <td>Oraple</td>
+            <td><img src="oraple_0.jpg" alt="Oraple 0"></td>
+            <td><img src="oraple_1.jpg" alt="Oraple 1"></td>
