@@ -11,7 +11,7 @@
             margin: 0;
             padding: 20px;
         }
-        h1, h2, h3, h4 {
+        h1, h2, h3 {
             color: #333;
             text-align: center;
         }
@@ -26,6 +26,7 @@
         }
         h4 {
             font-size: 1.5em;
+            margin-bottom: 0px;
         }
         .author {
             text-align: center;
@@ -55,103 +56,73 @@
     <h2>Fun With Filters</h2>
 
     <h3>Finite Difference Operator</h3>
-    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+    <h4> Approach </h4>
+    <p> I calculated the partial derivative in x and y of the cameraman image by convolving the original image with the finite difference operators 
+        D_x = np.array([[1, -1]]) and D_y = np.array([[1], [-1]]).
+        The gradient magnitude image is derived from the partial derivatives, using the formula, sqrt(gradient_x_image ** 2 + gradient_y_image ** 2).
+        The edge image was produced by binarizing the gradient magnitude image.  I used a threshold of 0.3 to produce my results.
+    </p>
 
+    <h4> Results</h4>
     <table>
         <tr>
-            <td><img src="original_image.jpg" alt="Original Image"></td>
-            <td><img src="gradient_x.jpg" alt="Gradient X Image"></td>
-            <td><img src="gradient_y.jpg" alt="Gradient Y Image"></td>
-            <td><img src="gradient_magnitude.jpg" alt="Gradient Magnitude Image"></td>
-            <td><img src="edge_image.jpg" alt="Edge Image"></td>
+            <td>Original Image</td>
+            <td>Gradient X Image</td>
+            <td>Gradient Y Image</td>
+            <td>Gradient Magnitude Image</td>
+            <td>Edge Image</td>
+        </tr>
+        <tr>
+            <td><img src="media/cameraman.png" alt="Original Image"></td>
+            <td><img src="media/cameramangradx.jpg" alt="Gradient X Image"></td>
+            <td><img src="media/cameramangrady.jpg" alt="Gradient Y Image"></td>
+            <td><img src="media/cameramangradmag.jpg" alt="Gradient Magnitude Image"></td>
+            <td><img src="media/cameramanedgeimage.jpg" alt="Edge Image"></td>
         </tr>
     </table>
 
     <h3>Derivative of Gaussian (DoG) Filter</h3>
+    <h4> Approach</h4>
+    <p>To produced the first row of images, I blurred the original image by convolving it with a gaussian.  Then, I convolved the blurred image 
+    with the finite difference operators D_x and D_y. 
+    </p>
+    <p>To produce the second row of images, I convolved a gaussian with the finite difference operators D_x and D_y to produce the DoG filter.
+        Then I convolved the original image with the DoG X and Y filters. </p>
+    
+    <p>I developed the gradient magnitude image and edge image using the same techniques from earlier.</p>
+
+    <h4>Differences</h4>
+    <p>These images have much wider lines than the one above, and are much smoother with less noise.  
+        This is due to the Gaussian's blurring effect on the original image. </p>
+    <p>Compared with each other, the rows of each image are practically identical.  There are only minor differences on the edges of each image due to
+        the way convolutions on the boundaries are calculated.  This is because a convolution is associative and commutative.  
+        The only difference in each row is what order I computed the convolutions.
+    </p>
+    <h4> Results</h4>
     <table>
         <tr>
-            <td><img src="dog_1.jpg" alt="DoG Image 1"></td>
-            <td><img src="dog_2.jpg" alt="DoG Image 2"></td>
-            <td><img src="dog_3.jpg" alt="DoG Image 3"></td>
-            <td><img src="dog_4.jpg" alt="DoG Image 4"></td>
-            <td><img src="dog_5.jpg" alt="DoG Image 5"></td>
+            <td>Gradient X Image Blurred</td>
+            <td>Gradient Y Image Blurred</td>
+            <td>Gradient Magnitude Image Blurred</td>
+            <td>Edge Image Blurred</td>
         </tr>
         <tr>
-            <td><img src="dog_6.jpg" alt="DoG Image 6"></td>
-            <td><img src="dog_7.jpg" alt="DoG Image 7"></td>
-            <td><img src="dog_8.jpg" alt="DoG Image 8"></td>
-            <td><img src="dog_9.jpg" alt="DoG Image 9"></td>
-            <td><img src="dog_10.jpg" alt="DoG Image 10"></td>
-        </tr>
-    </table>
-
-    <h2>Fun With Frequencies</h2>
-
-    <h3>Image "Sharpening"</h3>
-
-    <h4>Taj Mahal Image</h4>
-    <table>
-        <tr>
-            <td><img src="taj_original.jpg" alt="Taj Mahal Original"></td>
-            <td><img src="taj_sharp1.jpg" alt="Taj Mahal Sharpened 1"></td>
-            <td><img src="taj_sharp2.jpg" alt="Taj Mahal Sharpened 2"></td>
+            <td><img src="media/cameramangradxblurred.jpg" alt="Gradient X Blurred Image"></td>
+            <td><img src="media/cameramangradyblurred.jpg" alt="Gradient Y Blurred Image"></td>
+            <td><img src="media/cameramangradmagblurred.jpg" alt="Gradient Magnitude Blurred Image"></td>
+            <td><img src="media/cameramanedgeimageblurred.jpg" alt="Edge Image Blurred"></td>
         </tr>
         <tr>
-            <td>Alpha: 0</td>
-            <td>Alpha: 0.5</td>
-            <td>Alpha: 1.0</td>
+            <td>Gradient X Image DoG</td>
+            <td>Gradient Y Image DoG</td>
+            <td>Gradient Magnitude Image DoG</td>
+            <td>Edge Image DoG</td>
         </tr>
         <tr>
-            <td><img src="taj_sharp3.jpg" alt="Taj Mahal Sharpened 3"></td>
-            <td><img src="taj_sharp4.jpg" alt="Taj Mahal Sharpened 4"></td>
-            <td><img src="taj_sharp5.jpg" alt="Taj Mahal Sharpened 5"></td>
-        </tr>
-        <tr>
-            <td>Alpha: 1.5</td>
-            <td>Alpha: 2.0</td>
-            <td>Alpha: 2.5</td>
-        </tr>
-    </table>
-<body>
-    <h1>Fun With Filters and Frequencies!</h1>
-    <p>By Alec Thompson</p>
-
-    <h2>Fun With Filters</h2>
-
-    <h3>Finite Difference Operator</h3>
-
-    <h4>Approach</h4>
-    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
-
-    <table>
-        <tr>
-            <td><img src="original_image.jpg" alt="Original Image"></td>
-            <td><img src="gradient_x.jpg" alt="Gradient X Image"></td>
-            <td><img src="gradient_y.jpg" alt="Gradient Y Image"></td>
-            <td><img src="gradient_magnitude.jpg" alt="Gradient Magnitude Image"></td>
-            <td><img src="edge_image.jpg" alt="Edge Image"></td>
-        </tr>
-    </table>
-
-    <h3>Derivative of Gaussian (DoG) Filter</h3>
-
-    <h4>Approach</h4>
-    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
-
-    <table>
-        <tr>
-            <td><img src="dog_1.jpg" alt="DoG Image 1"></td>
-            <td><img src="dog_2.jpg" alt="DoG Image 2"></td>
-            <td><img src="dog_3.jpg" alt="DoG Image 3"></td>
-            <td><img src="dog_4.jpg" alt="DoG Image 4"></td>
-            <td><img src="dog_5.jpg" alt="DoG Image 5"></td>
-        </tr>
-        <tr>
-            <td><img src="dog_6.jpg" alt="DoG Image 6"></td>
-            <td><img src="dog_7.jpg" alt="DoG Image 7"></td>
-            <td><img src="dog_8.jpg" alt="DoG Image 8"></td>
-            <td><img src="dog_9.jpg" alt="DoG Image 9"></td>
-            <td><img src="dog_10.jpg" alt="DoG Image 10"></td>
+            <td><img src="media/cameramangradxdog.jpg" alt="Gradient X DoG Image"></td>
+            <td><img src="media/cameramangradydog.jpg" alt="Gradient Y DoG Image"></td>
+            <td><img src="media/cameramangradmagdog.jpg" alt="Gradient Magnitude DoG Image"></td>
+            <td><img src="media/cameramanedgeimagedog.jpg" alt="Edge Image DoG"></td>
         </tr>
     </table>
 
@@ -160,217 +131,394 @@
     <h3>Image "Sharpening"</h3>
 
     <h4>Approach</h4>
-    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+    <p> To sharpen an image, I added a high pass filter of the image to the original image to emphasize the image's details.  
+        To compute the high pass filter of the image, I needed to first create the unsharp mask filter.  
+    The unsharp mask filter is computed by convolving the original image with a gaussian to blur it, so it only contains the low frequencies.
+Then, I subtract the unsharp mask filter from the original image to get the high pass filter of the image, which contains only the high images.   </p>
 
-    <h4>Taj Mahal Image</h4>
+    <h4>Taj Mahal</h4>
     <table>
-        <tr>
-            <td><img src="taj_original.jpg" alt="Taj Mahal Original"></td>
-            <td><img src="taj_sharp1.jpg" alt="Taj Mahal Sharpened 1"></td>
-            <td><img src="taj_sharp2.jpg" alt="Taj Mahal Sharpened 2"></td>
-        </tr>
-        <tr>
-            <td>Alpha: 0</td>
+        <tr></tr>
+            <td>Original Image</td>
             <td>Alpha: 0.5</td>
             <td>Alpha: 1.0</td>
         </tr>
         <tr>
-            <td><img src="taj_sharp3.jpg" alt="Taj Mahal Sharpened 3"></td>
-            <td><img src="taj_sharp4.jpg" alt="Taj Mahal Sharpened 4"></td>
-            <td><img src="taj_sharp5.jpg" alt="Taj Mahal Sharpened 5"></td>
+            <td><img src="media/taj.jpg" alt="Taj Mahal Original"></td>
+            <td><img src="media/tajalpha05.jpg" alt="Taj Mahal Alpha 0.5"></td>
+            <td><img src="media/tajalpha10.jpg" alt="Taj Mahal Alpha 1.9"></td>
         </tr>
         <tr>
-            <td>Alpha: 1.5</td>
             <td>Alpha: 2.0</td>
-            <td>Alpha: 2.5</td>
+            <td>Alpha: 4.0</td>
+            <td>Alpha: 8.0</td>
+        </tr>
+        <tr>
+            <td><img src="media/tajalpha20.jpg" alt="Taj Mahal Alpha 2.0"></td>
+            <td><img src="media/tajalpha40.jpg" alt="Taj Mahal Alpha 4.0"></td>
+            <td><img src="media/tajalpha80.jpg" alt="Taj Mahal Alpha 8.0"></td>
         </tr>
     </table>
 
-    <h4>Buddha Image</h4>
+    <h4>Buddha</h4>
     <table>
         <tr>
-            <td><img src="buddha_original.jpg" alt="Buddha Original"></td>
-            <td><img src="buddha_sharp1.jpg" alt="Buddha Sharpened 1"></td>
-            <td><img src="buddha_sharp2.jpg" alt="Buddha Sharpened 2"></td>
-        </tr>
-        <tr>
-            <td>Alpha: 0</td>
+            <td>Original Image</td>
             <td>Alpha: 0.5</td>
             <td>Alpha: 1.0</td>
         </tr>
         <tr>
-            <td><img src="buddha_sharp3.jpg" alt="Buddha Sharpened 3"></td>
-            <td><img src="buddha_sharp4.jpg" alt="Buddha Sharpened 4"></td>
-            <td><img src="buddha_sharp5.jpg" alt="Buddha Sharpened 5"></td>
+            <td><img src="media/buddha.jpeg" alt="Buddha Original"></td>
+            <td><img src="media/buddhaalpha05.jpg" alt="Buddha Sharpened 1"></td>
+            <td><img src="media/buddhaalpha10.jpg" alt="Buddha Sharpened 2"></td>
         </tr>
         <tr>
-            <td>Alpha: 1.5</td>
             <td>Alpha: 2.0</td>
-            <td>Alpha: 2.5</td>
+            <td>Alpha: 4.0</td>
+            <td>Alpha: 8.0</td>
+        </tr>
+        <tr>
+            <td><img src="media/buddhaalpha20.jpg" alt="Buddha Sharpened 3"></td>
+            <td><img src="media/buddhaalpha40.jpg" alt="Buddha Sharpened 4"></td>
+            <td><img src="media/buddhaalpha80.jpg" alt="Buddha Sharpened 5"></td>
         </tr>
     </table>
 
-    <h4>Cactus Image</h4>
-    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+    <h4>Cactus</h4>
+    <p>I blurred and then sharpened the cactus image to evaluate the effectiveness.  
+        The sharpened image brings back some of the contrasts between the cactus flowers and rest of the cactus.
+    However, the blurred image lost a lot of the details in the original, particularly the cactus spines.  
+This information was lost and the sharpened image could not recover it.</p>
 
     <table>
         <tr>
-            <td><img src="cactus_original.jpg" alt="Cactus Original"></td>
-            <td><img src="cactus_blurred.jpg" alt="Cactus Blurred"></td>
-            <td><img src="cactus_blurred_sharpened.jpg" alt="Cactus Blurred and Sharpened"></td>
+            <td>Original Image</td>
+            <td>Blurred Image</td>
+            <td>Blurred then Sharpened Image</td>
+        </tr>
+        <tr>
+            <td><img src="media/cacti.jpeg" alt="Cactus Original"></td>
+            <td><img src="media/cactiblurred.jpg" alt="Cactus Blurred"></td>
+            <td><img src="media/cactisharpened.jpg" alt="Cactus Blurred and Sharpened"></td>
         </tr>
     </table>
 
     <h3>Hybrid Images</h3>
     <h4>Approach</h4>
-    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+    <p> Hybrid images are produced by taking a low pass filter of one image, and a high pass filter of another image, and then combining the two images
+         by adding them on top of each other.  Low frequencies are seen more prominently at a distance, so the viewer would see the low pass image from far away. 
+        But as they approach, the high frequencies become much more visible, and high pass image becomes more conspicuous. </p>
+    <p>
+        Low pass filters can be developed by convolving the image with a gaussian.  
+        High pass filters are developed by subtracting the low pass filter from the original image.
+    </p>
+    <p> I produced RGB hybrid images by convolving the image with the gaussian across each RGB channel.</p>
 
     <h4>Derek and Nutmeg Grayscale Hybrid</h4>
     <table>
         <tr>
-            <td><img src="derek_original.jpg" alt="Derek Original"></td>
-            <td><img src="nutmeg_original.jpg" alt="Nutmeg Original"></td>
-            <td><img src="derek_lowpass.jpg" alt="Derek Low Pass"></td>
-            <td><img src="nutmeg_highpass.jpg" alt="Nutmeg High Pass"></td>
-            <td><img src="derek_nutmeg_hybrid.jpg" alt="Derek Nutmeg Hybrid"></td>
+            <td>Original Derek Image</td>
+            <td>Original Nutmeg Image</td>
+            <td>Low Pass Derek Image</td>
+            <td>High Pass Nutmeg Image</td>
+            <td>Hybrid Derek Nutmeg Image</td>
         </tr>
         <tr>
-            <td><img src="derek_ft.jpg" alt="Derek Fourier Transform"></td>
-            <td><img src="nutmeg_ft.jpg" alt="Nutmeg Fourier Transform"></td>
-            <td><img src="derek_lowpass_ft.jpg" alt="Derek Low Pass FT"></td>
-            <td><img src="nutmeg_highpass_ft.jpg" alt="Nutmeg High Pass FT"></td>
-            <td><img src="derek_nutmeg_hybrid_ft.jpg" alt="Derek Nutmeg Hybrid FT"></td>
+            <td><img src="media/derek_gray_aligned.jpg" alt="Derek Original"></td>
+            <td><img src="media/nutmeg_gray_aligned.jpg" alt="Nutmeg Original"></td>
+            <td><img src="media/low_pass_derek_gray.jpg" alt="Derek Low Pass"></td>
+            <td><img src="media/high_pass_nutmeg_gray.jpg" alt="Nutmeg High Pass"></td>
+            <td><img src="media/dereknutmeg_gray.jpg" alt="Derek Nutmeg Hybrid"></td>
+        </tr>
+        <tr>
+            <td>Original Derek Image FFT</td>
+            <td>Original Nutmeg Image FFT</td>
+            <td>Low Pass Derek Image FFT</td>
+            <td>High Pass Nutmeg Image FFT</td>
+            <td>Hybrid Derek Nutmeg Image FFT</td>
+        </tr>
+        <tr>
+            <td><img src="media/derek_fft.jpg" alt="Derek Fourier Transform"></td>
+            <td><img src="media/nutmeg_fft.jpg" alt="Nutmeg Fourier Transform"></td>
+            <td><img src="media/low_pass_derek_gray_fft.jpg" alt="Derek Low Pass FT"></td>
+            <td><img src="media/high_pass_nutmeg_gray_fft.jpg" alt="Nutmeg High Pass FT"></td>
+            <td><img src="media/dereknutmeg_gray_fft.jpg" alt="Derek Nutmeg Hybrid FT"></td>
         </tr>
     </table>
 
     <h4>Derek and Nutmeg RGB Hybrid</h4>
     <table>
         <tr>
-            <td><img src="derek_original_rgb.jpg" alt="Derek Original RGB"></td>
-            <td><img src="nutmeg_original_rgb.jpg" alt="Nutmeg Original RGB"></td>
-            <td><img src="derek_lowpass_rgb.jpg" alt="Derek Low Pass RGB"></td>
-            <td><img src="nutmeg_highpass_rgb.jpg" alt="Nutmeg High Pass RGB"></td>
-            <td><img src="derek_nutmeg_hybrid_rgb.jpg" alt="Derek Nutmeg Hybrid RGB"></td>
+            <td>Original Derek Image</td>
+            <td>Original Nutmeg Image</td>
+            <td>Low Pass Derek Image</td>
+            <td>High Pass Nutmeg Image</td>
+            <td>Hybrid Derek Nutmeg Image</td>
         </tr>
         <tr>
-            <td><img src="derek_ft_rgb.jpg" alt="Derek Fourier Transform RGB"></td>
-            <td><img src="nutmeg_ft_rgb.jpg" alt="Nutmeg Fourier Transform RGB"></td>
-            <td><img src="derek_lowpass_ft_rgb.jpg" alt="Derek Low Pass FT RGB"></td>
-            <td><img src="nutmeg_highpass_ft_rgb.jpg" alt="Nutmeg High Pass FT RGB"></td>
-            <td><img src="derek_nutmeg_hybrid_ft_rgb.jpg" alt="Derek Nutmeg Hybrid FT RGB"></td>
-        </tr>
-    </table>
-
-    <h4>Another Two Image RGB Hybrid</h4>
-    <table>
-        <tr>
-            <td><img src="image1_original.jpg" alt="Image 1 Original"></td>
-            <td><img src="image2_original.jpg" alt="Image 2 Original"></td>
-            <td><img src="image1_lowpass.jpg" alt="Image 1 Low Pass"></td>
-            <td><img src="image2_highpass.jpg" alt="Image 2 High Pass"></td>
-            <td><img src="image1_image2_hybrid.jpg" alt="Image 1 and 2 Hybrid"></td>
+            <td><img src="media/derek_aligned.jpg" alt="Derek Original RGB"></td>
+            <td><img src="media/nutmeg_aligned.jpg" alt="Nutmeg Original RGB"></td>
+            <td><img src="media/low_pass_derek_rgb.jpg" alt="Derek Low Pass RGB"></td>
+            <td><img src="media/high_pass_nutmeg_rgb.jpg" alt="Nutmeg High Pass RGB"></td>
+            <td><img src="media/dereknutmeg_rgb.jpg" alt="Derek Nutmeg Hybrid RGB"></td>
         </tr>
         <tr>
-            <td><img src="image1_ft.jpg" alt="Image 1 Fourier Transform"></td>
-            <td><img src="image2_ft.jpg" alt="Image 2 Fourier Transform"></td>
-            <td><img src="image1_lowpass_ft.jpg" alt="Image 1 Low Pass FT"></td>
-            <td><img src="image2_highpass_ft.jpg" alt="Image 2 High Pass FT"></td>
-            <td><img src="image1_image2_hybrid_ft.jpg" alt="Image 1 and 2 Hybrid FT"></td>
+            <td>Original Derek Image FFT</td>
+            <td>Original Nutmeg Image FFT</td>
+            <td>Low Pass Derek Image FFT</td>
+            <td>High Pass Nutmeg Image FFT</td>
+            <td>Hybrid Derek Nutmeg Image FFT</td>
+        </tr>
+        <tr>
+            <td><img src="media/derek_fft.jpg" alt="Derek Fourier Transform RGB"></td>
+            <td><img src="media/nutmeg_fft.jpg" alt="Nutmeg Fourier Transform RGB"></td>
+            <td><img src="media/low_pass_derek_rgb_fft.jpg" alt="Derek Low Pass FT RGB"></td>
+            <td><img src="media/high_pass_nutmeg_rgb_fft.jpg" alt="Nutmeg High Pass FT RGB"></td>
+            <td><img src="media/dereknutmeg_rgb_fft.jpg" alt="Derek Nutmeg Hybrid FT RGB"></td>
         </tr>
     </table>
 
-    <h4>Hybrid Image Failure</h4>
+    <h4>Bear Grylls and Grizzly Bear Hybrid</h4>
     <table>
         <tr>
-            <td><img src="failure1_original.jpg" alt="Failure 1 Original"></td>
-            <td><img src="failure2_original.jpg" alt="Failure 2 Original"></td>
-            <td><img src="failure1_lowpass.jpg" alt="Failure 1 Low Pass"></td>
-            <td><img src="failure2_highpass.jpg" alt="Failure 2 High Pass"></td>
-            <td><img src="failure_hybrid.jpg" alt="Failure Hybrid"></td>
+            <td>Original Bear Grylls Image</td>
+            <td>Original Grizzly Bear Image</td>
+            <td>Low Pass Bear Grylls Image</td>
+            <td>High Pass Grizzly Bear Image</td>
+            <td>Hybrid Grylls Grizzly Image</td>
         </tr>
         <tr>
-            <td><img src="failure1_ft.jpg" alt="Failure 1 Fourier Transform"></td>
-            <td><img src="failure2_ft.jpg" alt="Failure 2 Fourier Transform"></td>
-            <td><img src="failure1_lowpass_ft.jpg" alt="Failure 1 Low Pass FT"></td>
-            <td><img src="failure2_highpass_ft.jpg" alt="Failure 2 High Pass FT"></td>
-            <td><img src="failure_hybrid_ft.jpg" alt="Failure Hybrid FT"></td>
+            <td><img src="media/beargrylls_aligned.jpg" alt="Image 1 Original"></td>
+            <td><img src="media/grizzly_aligned.jpg" alt="Image 2 Original"></td>
+            <td><img src="media/low_pass_grylls_rgb.jpg" alt="Image 1 Low Pass"></td>
+            <td><img src="media/high_pass_grizzly_rgb.jpg" alt="Image 2 High Pass"></td>
+            <td><img src="media/hybrid_grylls_grizzly_rgb.jpg" alt="Image 1 and 2 Hybrid"></td>
+        </tr>
+        <tr>
+            <td>Original Bear Grylls Image FFT</td>
+            <td>Original Grizzly Bear Image FFT</td>
+            <td>Low Pass Bear Grylls Image FFT</td>
+            <td>High Pass Grizzly Bear Image FFT</td>
+            <td>Hybrid Grylls Grizzly Image FFT</td>
+        </tr>
+        <tr>
+            <td><img src="media/beargrylls_fft.jpg" alt="Image 1 Fourier Transform"></td>
+            <td><img src="media/grizzly_fft.jpg" alt="Image 2 Fourier Transform"></td>
+            <td><img src="media/low_pass_grylls_rgb_fft.jpg" alt="Image 1 Low Pass FT"></td>
+            <td><img src="media/high_pass_grizzly_rgb_fft.jpg" alt="Image 2 High Pass FT"></td>
+            <td><img src="media/hybrid_grylls_grizzly_rgb_fft.jpg" alt="Image 1 and 2 Hybrid FT"></td>
+        </tr>
+    </table>
+
+    <h4>Stealth Bomber and Open Ocean (Failure)</h4>
+    <p>
+        I attempted to create a hybrid image where the stealth bomber was visible up close, but disappeared into the open ocean from far away, 
+        in true camouflage fashion.  Unfortunately, the low pass open ocean image is not noticable enough, even at a distance, to make the 
+        stealth bomber go away.  This stealth bomber is not very stealthy!
+    </p>
+    <table>
+        <tr>
+            <td>Original Open Ocean Image</td>
+            <td>Original Stealth Bomber Image</td>
+            <td>Low Pass Open Ocean Image</td>
+            <td>High Pass Stealth Bomber Image</td>
+            <td>Hybrid Stealthy Ocean Bomber Image</td>
+        </tr>
+        <tr>
+            <td><img src="media/sea_aligned.jpg" alt="Failure 1 Original"></td>
+            <td><img src="media/stealth_aligned.jpg" alt="Failure 2 Original"></td>
+            <td><img src="media/low_pass_sea_rgb.jpg" alt="Failure 1 Low Pass"></td>
+            <td><img src="media/high_pass_stealth_rgb.jpg" alt="Failure 2 High Pass"></td>
+            <td><img src="media/hybrid_sea_stealth_rgb.jpg" alt="Failure Hybrid"></td>
+        </tr>
+        <tr>
+            <td>Original Open Ocean Image FFT</td>
+            <td>Original Stealth Bomber Image FFT</td>
+            <td>Low Pass Open Ocean Image FFT</td>
+            <td>High Pass Stealth Bomber Image FFT</td>
+            <td>Hybrid Stealthy Ocean Bomber Image FFT</td>
+        </tr>
+        <tr>
+            <td><img src="media/sea_fft.jpg" alt="Failure 1 Fourier Transform"></td>
+            <td><img src="media/stealth_fft.jpg" alt="Failure 2 Fourier Transform"></td>
+            <td><img src="media/low_pass_sea_rgb_fft.jpg" alt="Failure 1 Low Pass FT"></td>
+            <td><img src="media/high_pass_stealth_rgb_fft.jpg" alt="Failure 2 High Pass FT"></td>
+            <td><img src="media/hybrid_sea_stealth_rgb_fft.jpg" alt="Failure Hybrid FT"></td>
         </tr>
     </table>
 
     <h3>Gaussian and Laplacian Stacks</h3>
 
     <h4>Approach</h4>
-    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+    <p>Gaussian stacks are developed by repeatedly applying a Gaussian filter to each level, starting at the original image.  
+        Laplacian stacks are developed by subtracting the i+1th level of the Gaussian stack from the ith level.  
+        The final image in the Laplacian stack is a copy of the final image in the Gaussian stack. </p>
 
     <h4>Apples and Oranges</h4>
 
     <table>
         <tr>
-            <th>Level 0</th>
+            <th></th>
             <th>Level 1</th>
             <th>Level 2</th>
             <th>Level 3</th>
             <th>Level 4</th>
+            <th>Level 5</th>
         </tr>
         <tr>
             <td>Apple Gaussian</td>
-            <td><img src="apple_gaussian_0.jpg" alt="Apple Gaussian 0"></td>
-            <td><img src="apple_gaussian_1.jpg" alt="Apple Gaussian 1"></td>
-            <td><img src="apple_gaussian_2.jpg" alt="Apple Gaussian 2"></td>
-            <td><img src="apple_gaussian_3.jpg" alt="Apple Gaussian 3"></td>
+            <td><img src="media/applegaussian0.jpg" alt="Apple Gaussian 0"></td>
+            <td><img src="media/applegaussian1.jpg" alt="Apple Gaussian 1"></td>
+            <td><img src="media/applegaussian2.jpg" alt="Apple Gaussian 2"></td>
+            <td><img src="media/applegaussian3.jpg" alt="Apple Gaussian 3"></td>
+            <td><img src="media/applegaussian4.jpg" alt="Apple Gaussian 4"></td>
         </tr>
         <tr>
             <td>Apple Laplacian</td>
-            <td><img src="apple_laplacian_0.jpg" alt="Apple Laplacian 0"></td>
-            <td><img src="apple_laplacian_1.jpg" alt="Apple Laplacian 1"></td>
-            <td><img src="apple_laplacian_2.jpg" alt="Apple Laplacian 2"></td>
-            <td><img src="apple_laplacian_3.jpg" alt="Apple Laplacian 3"></td>
+            <td><img src="media/applelaplacian0.jpg" alt="Apple Laplacian 0"></td>
+            <td><img src="media/applelaplacian1.jpg" alt="Apple Laplacian 1"></td>
+            <td><img src="media/applelaplacian2.jpg" alt="Apple Laplacian 2"></td>
+            <td><img src="media/applelaplacian3.jpg" alt="Apple Laplacian 3"></td>
+            <td><img src="media/applelaplacian4.jpg" alt="Apple Laplacian 3"></td>
         </tr>
         <tr>
             <td>Orange Gaussian</td>
-            <td><img src="orange_gaussian_0.jpg" alt="Orange Gaussian 0"></td>
-            <td><img src="orange_gaussian_1.jpg" alt="Orange Gaussian 1"></td>
-            <td><img src="orange_gaussian_2.jpg" alt="Orange Gaussian 2"></td>
-            <td><img src="orange_gaussian_3.jpg" alt="Orange Gaussian 3"></td>
+            <td><img src="media/orangegaussian0.jpg" alt="Orange Gaussian 0"></td>
+            <td><img src="media/orangegaussian1.jpg" alt="Orange Gaussian 1"></td>
+            <td><img src="media/orangegaussian2.jpg" alt="Orange Gaussian 2"></td>
+            <td><img src="media/orangegaussian3.jpg" alt="Orange Gaussian 3"></td>
+            <td><img src="media/orangegaussian4.jpg" alt="Orange Gaussian 4"></td>
         </tr>
         <tr>
             <td>Orange Laplacian</td>
-            <td><img src="orange_laplacian_0.jpg" alt="Orange Laplacian 0"></td>
-            <td><img src="orange_laplacian_1.jpg" alt="Orange Laplacian 1"></td>
-            <td><img src="orange_laplacian_2.jpg" alt="Orange Laplacian 2"></td>
-            <td><img src="orange_laplacian_3.jpg" alt="Orange Laplacian 3"></td>
+            <td><img src="media/orangelaplacian0.jpg" alt="Orange Laplacian 0"></td>
+            <td><img src="media/orangelaplacian1.jpg" alt="Orange Laplacian 1"></td>
+            <td><img src="media/orangelaplacian2.jpg" alt="Orange Laplacian 2"></td>
+            <td><img src="media/orangelaplacian3.jpg" alt="Orange Laplacian 3"></td>
+            <td><img src="media/orangelaplacian4.jpg" alt="Orange Laplacian 4"></td>
+
         </tr>
     </table>
 
     <h3>Multiresolution Blending</h3>
 
     <h4>Approach</h4>
-    <p>Gradient magnitude computation involves calculating the partial derivatives of an image in the x and y directions, then combining them to find the overall magnitude of change at each pixel.</p>
+    <p>The spline from which the two images are blurred is created through a mask.  
+        All values outside the mask are 0, while all values inside the mask are one.
+    When multiplied with an image, only the parts of the image inside the mask remain.  
+    I created a Gaussian stack of my mask, and Laplacian stacks of each image.  
+    The stacks were multiplied at each level.  To develop the blended image, I added up all
+     of the image masks together and then normalized the final image.  Blending the image at
+    different frequencies led to a smooth transition between the images. </p>
 
     <h4>Oraple</h4>
     <table>
         <tr>
-            <th>Level 0</th>
+            <th></th>
             <th>Level 1</th>
             <th>Level 2</th>
             <th>Level 3</th>
             <th>Level 4</th>
+            <th>Level 5</th>
         </tr>
         <tr>
-            <td>Apple Mask</td>
-            <td><img src="apple_mask_0.jpg" alt="Apple Mask 0"></td>
-            <td><img src="apple_mask_1.jpg" alt="Apple Mask 1"></td>
-            <td><img src="apple_mask_2.jpg" alt="Apple Mask 2"></td>
-            <td><img src="apple_mask_3.jpg" alt="Apple Mask 3"></td>
+            <td>Apple Masks</td>
+            <td><img src="media/maskedapple0.jpg" alt="Apple Mask 0"></td>
+            <td><img src="media/maskedapple1.jpg" alt="Apple Mask 1"></td>
+            <td><img src="media/maskedapple2.jpg" alt="Apple Mask 2"></td>
+            <td><img src="media/maskedapple3.jpg" alt="Apple Mask 3"></td>
+            <td><img src="media/maskedapple4.jpg" alt="Apple Mask 4"></td>
         </tr>
         <tr>
-            <td>Orange Mask</td>
-            <td><img src="orange_mask_0.jpg" alt="Orange Mask 0"></td>
-            <td><img src="orange_mask_1.jpg" alt="Orange Mask 1"></td>
-            <td><img src="orange_mask_2.jpg" alt="Orange Mask 2"></td>
-            <td><img src="orange_mask_3.jpg" alt="Orange Mask 3"></td>
+            <td>Orange Masks</td>
+            <td><img src="media/maskedorange0.jpg" alt="Orange Mask 0"></td>
+            <td><img src="media/maskedorange1.jpg" alt="Orange Mask 1"></td>
+            <td><img src="media/maskedorange2.jpg" alt="Orange Mask 2"></td>
+            <td><img src="media/maskedorange3.jpg" alt="Orange Mask 3"></td>
+            <td><img src="media/maskedorange4.jpg" alt="Orange Mask 4"></td>
         </tr>
         <tr>
-            <td>Oraple</td>
-            <td><img src="oraple_0.jpg" alt="Oraple 0"></td>
-            <td><img src="oraple_1.jpg" alt="Oraple 1"></td>
+            <td>Oraples</td>
+            <td><img src="media/oraple0.jpg" alt="Oraple 0"></td>
+            <td><img src="media/oraple1.jpg" alt="Oraple 1"></td>
+            <td><img src="media/oraple2.jpg" alt="Oraple 2"></td>
+            <td><img src="media/oraple3.jpg" alt="Oraple 3"></td>
+            <td><img src="media/oraple4.jpg" alt="Oraple 4"></td>
+
+        </tr>
+    </table>
+
+    <h4>Iced Turd</h4>
+    <table>
+        <tr>
+            <th></th>
+            <th>Level 1</th>
+            <th>Level 2</th>
+            <th>Level 3</th>
+            <th>Level 4</th>
+            <th>Level 5</th>
+        </tr>
+        <tr>
+            <td>Turd Masks</td>
+            <td><img src="media/masked_turds0.jpg" alt="Apple Mask 0"></td>
+            <td><img src="media/masked_turds1.jpg" alt="Apple Mask 1"></td>
+            <td><img src="media/masked_turds2.jpg" alt="Apple Mask 2"></td>
+            <td><img src="media/masked_turds3.jpg" alt="Apple Mask 3"></td>
+            <td><img src="media/masked_turds4.jpg" alt="Apple Mask 4"></td>
+        </tr>
+        <tr>
+            <td>Ice Cream Masks</td>
+            <td><img src="media/masked_icecream0.jpg" alt="Orange Mask 0"></td>
+            <td><img src="media/masked_icecream1.jpg" alt="Orange Mask 1"></td>
+            <td><img src="media/masked_icecream2.jpg" alt="Orange Mask 2"></td>
+            <td><img src="media/masked_icecream3.jpg" alt="Orange Mask 3"></td>
+            <td><img src="media/masked_icecream4.jpg" alt="Orange Mask 4"></td>
+        </tr>
+        <tr>
+            <td>Iced Turds</td>
+            <td><img src="media/icedturds0.jpg" alt="Oraple 0"></td>
+            <td><img src="media/icedturds1.jpg" alt="Oraple 1"></td>
+            <td><img src="media/icedturds2.jpg" alt="Oraple 2"></td>
+            <td><img src="media/icedturds3.jpg" alt="Oraple 3"></td>
+            <td><img src="media/icedturds4.jpg" alt="Oraple 4"></td>
+
+        </tr>
+    </table>
+
+    <h4>Camera Tank</h4>
+    <table>
+        <tr>
+            <th></th>
+            <th>Level 1</th>
+            <th>Level 2</th>
+            <th>Level 3</th>
+            <th>Level 4</th>
+            <th>Level 5</th>
+        </tr>
+        <tr>
+            <td>Tank Masks</td>
+            <td><img src="media/masked_tanks0.jpg" alt="Apple Mask 0"></td>
+            <td><img src="media/masked_tanks1.jpg" alt="Apple Mask 1"></td>
+            <td><img src="media/masked_tanks2.jpg" alt="Apple Mask 2"></td>
+            <td><img src="media/masked_tanks3.jpg" alt="Apple Mask 3"></td>
+            <td><img src="media/masked_tanks4.jpg" alt="Apple Mask 4"></td>
+        </tr>
+        <tr>
+            <td>Camera Masks</td>
+            <td><img src="media/masked_cameras0.jpg" alt="Orange Mask 0"></td>
+            <td><img src="media/masked_cameras1.jpg" alt="Orange Mask 1"></td>
+            <td><img src="media/masked_cameras2.jpg" alt="Orange Mask 2"></td>
+            <td><img src="media/masked_cameras3.jpg" alt="Orange Mask 3"></td>
+            <td><img src="media/masked_cameras4.jpg" alt="Orange Mask 4"></td>
+        </tr>
+        <tr>
+            <td>Camera Tanks</td>
+            <td><img src="media/cameratanks0.jpg" alt="Oraple 0"></td>
+            <td><img src="media/cameratanks1.jpg" alt="Oraple 1"></td>
+            <td><img src="media/cameratanks2.jpg" alt="Oraple 2"></td>
+            <td><img src="media/cameratanks3.jpg" alt="Oraple 3"></td>
+            <td><img src="media/cameratanks4.jpg" alt="Oraple 4"></td>
+
+        </tr>
+    </table>
+</body>
