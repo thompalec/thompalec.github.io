@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Morphing and Modelling a Photo Collection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            width: 70%; /* Set table width to 70% */
+            margin: 0 auto 20px; /* Center the table and add bottom margin */
+            table-layout: fixed;
+        }
+        h1, h2, h3 {
+            color: #333;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+        }
+        h2 {
+            font-size: 2em;
+        }
+        h3 {
+            font-size: 1.75em;
+        }
+        h4 {
+            font-size: 1.5em;
+            margin-bottom: 0px;
+        }
+        .author {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%; 
+            margin: 0 auto 20px; /* Center the table and add bottom margin */
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        img {
+            max-height: 40em;
+            max-width: 100%;
+            min-width: 100%;
+            height: auto;
+        }
+        .gif {
+            max-height: 40em;
+            max-width: 100%;
+            min-width: 0%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Face Morphing and Modelling a Photo Collection</h1>
+    <p class="author">By Alec Thompson</p>
+
+    <h3>Overview</h3>
+
+    <h3>Defining Correspondences</h3>
+
+        <p> I developed an interactive tool in python that allowed me to select corresponding points on two images.  
+            I used it to select corresponding points (eyes, nose, chin, forehead) on my images of Bradley Cooper and Emma Watson.  
+            The corners of each image were also selected, so that every pixel is within a triangle.  
+        Then, I computed the mean point set of the two images, and built a Delaunay triangulation of the mean points.  </p>
+        <table>
+            <tr>
+                <td><img src="media/coopertri.jpg" alt="Bradley Cooper with keypoints and triangulation"></td>
+                <td><img src="media/watsontri.jpg" alt="Emma Watson with keypoints and triangulation"></td>
+            </tr>
+            <tr>
+                <td>Bradley Cooper with keypoints and triangulation</td>
+                <td>Emma Watson with keypoints and triangulation</td>
+            </tr>
+        </table>
+
+    <h3>Computing the "Mid-way Face"</h3>
+
+        <p>Given the mean point set of the two images, I computed the affine transformation matrix to warp the
+             each triangle in the triangulation from the original images into this new shape.  I used an inverse-warp and used a nearest neighbor
+             algorithm to interpolate pixel values.
+            After I warped both images into the mean face shape, I ran a cross-dissolve to average the pixel values.</p>
+        <table>
+            <tr>
+                <td><img src="media/BradleyCooper.jpg" alt="Bradley Cooper"></td>
+                <td><img src="media/cooson.jpg" alt="Brama Cooson"></td>
+                <td><img src="media/EmmaWatson.jpg" alt="Emma Watson"></td>
+
+            </tr>
+            <tr>
+                <td>Bradley Cooper</td>
+                <td>Morphed Image (Brama Cooson)</td>
+                <td>Emma Watson</td>
+            </tr>
+        </table>
+
+    <h3>The Morph Sequence</h3>
+        <p>Using my existing algorithm, I used a range of weights from 0 to 1 for the shape configuration and the cross-dissolve.  
+            I saved these images and put them together into a GIF, for your viewing pleasure! </p>
+
+        <table>
+            <tr>
+                <td><img class="gif" src="media/cooson.gif" alt="Bradley Cooper to Emma Watson"></td>
+            </tr>
+            <tr>
+                <td>Bradley Cooper to Emma Watson</td>
+            </tr>
+        </table>
+
+    <h3>The "Mean Face" of a population</h3>
+        <p>
+            I used spatially normalized images and their corresponding points from the FEI Face Database, which contains 400 images.  
+            I morphed each of the images into the average face shape, and then averaged the pixel values to get the mean face shape.  
+        </p>
+        <table>
+            <tr>
+                <td><img src="media/1a.jpg" alt="Original Image 1"></td>
+                <td><img src="media/2a.jpg" alt="Original Image 2"></td>
+                <td><img src="media/3a.jpg" alt="Original Image 3"></td>
+                <td><img src="media/4b.jpg" alt="Original Image 4"></td>
+                <td><img src="media/5b.jpg" alt="Original Image 5"></td>
+                <td><img src="media/6b.jpg" alt="Original Image 6"></td>
+            </tr>
+            <tr>
+                <td>Original Image 1</td>
+                <td>Original Image 2</td>
+                <td>Original Image 3</td>
+                <td>Original Image 4</td>
+                <td>Original Image 5</td>
+                <td>Original Image 6</td>
+            </tr>
+            <tr>
+                <td><img src="media/warped_face_1a.jpg" alt="Warped Image 1"></td>
+                <td><img src="media/warped_face_2a.jpg" alt="Warped Image 2"></td>
+                <td><img src="media/warped_face_3a.jpg" alt="Warped Image 3"></td>
+                <td><img src="media/warped_face_4b.jpg" alt="Warped Image 4"></td>
+                <td><img src="media/warped_face_5b.jpg" alt="Warped Image 5"></td>
+                <td><img src="media/warped_face_6b.jpg" alt="Warped Image 6"></td>
+            </tr>
+            <tr>
+                <td>Warped Image 1</td>
+                <td>Warped Image 2</td>
+                <td>Warped Image 3</td>
+                <td>Warped Image 4</td>
+                <td>Warped Image 5</td>
+                <td>Warped Image 6</td>
+            </tr>
+        </table>
+
+        <p> Then, I warped my face to the average geometry, and the mean face onto my face's geometry.  </p>
+        <table>
+            <tr>
+                <td><img src="media/mean_neutral_face.jpg" alt="Mean neutral face of the population"></td>
+                <td><img src="media/mean_smiling_face.jpg" alt="Mean smiling face of the population"></td>
+                <td><img src="media/Alec250x300.jpg" alt="My Face"></td>
+            </tr>
+            <tr>
+                <td>Mean neutral face of the population</td>
+                <td>Mean smiling face of the population</td>
+                <td>My face</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td><img src="media/face_onto_mean_neutral.jpg" alt="My face warped to the average geometry"></td>
+                <td><img src="media/mean_onto_face_neutral.jpg" alt="Mean face warped onto my face's geometry"></td>
+            </tr>
+            <tr>
+                <td>My face warped to the average neutral geometry</td>
+                <td>Mean neutral face warped onto my face's geometry</td>
+            </tr>
+        </table>
+    
+
+    <h3>Caricatures: Extrapolating from the mean</h3>
+        <p> I created a caricature of myself by using a warp fraction outside of the normal range of 0 to 1.  
+            A negative warp fraction exaggerates my facial features, while a positive warp fraction larger than 1 
+            exaggerates the mean face features.  The formula I used to compute the caricatured warp shape is 
+            <code>(1-warp_frac) * my_face_points + warp_frac * mean_face_points</code>. </p>
+
+        <table>
+            <tr>
+                <td><img src="media/negative_caricature.jpg" alt="Warp_frac = -2"></td>
+                <td><img src="media/positive_caricature.jpg" alt="Warp_frac = 2"></td>
+            </tr>
+            <tr>
+                <td>Warp_frac = -2</td>
+                <td>Warp_frac = 2</td>
+            </tr>
+        </table>
+
+    <h3>Principal Component Analysis</h3>
+        <p> I represented the images in the database as vectors of pixels, and then I performed principal component analysis
+            on the vectors to find the eigenvectors with the largest singular values.  I converted the eigenvectors back into images
+        (eigenfaces), and plotted the results below.   </p>
+
+        <table>
+            <tr>
+                <td><img src="media/neutral_eigenface_0.jpg" alt="Neutral Eigenface 1"></td>
+                <td><img src="media/neutral_eigenface_1.jpg" alt="Neutral Eigenface 2"></td>
+                <td><img src="media/neutral_eigenface_2.jpg" alt="Neutral Eigenface 3"></td>
+                <td><img src="media/neutral_eigenface_3.jpg" alt="Neutral Eigenface 4"></td>
+            </tr>
+            <tr>
+                <td>Neutral Eigenface 1</td>
+                <td>Neutral Eigenface 2</td>
+                <td>Neutral Eigenface 3</td>
+                <td>Neutral Eigenface 4</td>
+            </tr>
+            <tr>
+                <td><img src="media/neutral_eigenface_4.jpg" alt="Neutral Eigenface 5"></td>
+                <td><img src="media/neutral_eigenface_5.jpg" alt="Neutral Eigenface 6"></td>
+                <td><img src="media/neutral_eigenface_6.jpg" alt="Neutral Eigenface 7"></td>
+                <td><img src="media/neutral_eigenface_7.jpg" alt="Neutral Eigenface 8"></td>
+            </tr>
+            <tr>
+                <td>Neutral Eigenface 5</td>
+                <td>Neutral Eigenface 6</td>
+                <td>Neutral Eigenface 7</td>
+                <td>Neutral Eigenface 8</td>
+            </tr>
+            <tr>
+                <td><img src="media/neutral_eigenface_8.jpg" alt="Neutral Eigenface 9"></td>
+                <td><img src="media/neutral_eigenface_9.jpg" alt="Neutral Eigenface 10"></td>
+                <td><img src="media/neutral_eigenface_10.jpg" alt="Neutral Eigenface 11"></td>
+                <td><img src="media/neutral_eigenface_11.jpg" alt="Neutral Eigenface 12"></td>
+            </tr>
+            <tr>
+                <td>Neutral Eigenface 9</td>
+                <td>Neutral Eigenface 10</td>
+                <td>Neutral Eigenface 11</td>
+                <td>Neutral Eigenface 12</td>
+            </tr>
+            <tr>
+                <td><img src="media/neutral_eigenface_12.jpg" alt="Neutral Eigenface 13"></td>
+                <td><img src="media/neutral_eigenface_13.jpg" alt="Neutral Eigenface 14"></td>
+                <td><img src="media/neutral_eigenface_14.jpg" alt="Neutral Eigenface 15"></td>
+                <td><img src="media/neutral_eigenface_15.jpg" alt="Neutral Eigenface 16"></td>
+            </tr>
+            <tr>
+                <td>Neutral Eigenface 13</td>
+                <td>Neutral Eigenface 14</td>
+                <td>Neutral Eigenface 15</td>
+                <td>Neutral Eigenface 16</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <td><img src="media/smiling_eigenface_0.jpg" alt="Smiling Eigenface 1"></td>
+                <td><img src="media/smiling_eigenface_1.jpg" alt="Smiling Eigenface 2"></td>
+                <td><img src="media/smiling_eigenface_2.jpg" alt="Smiling Eigenface 3"></td>
+                <td><img src="media/smiling_eigenface_3.jpg" alt="Smiling Eigenface 4"></td>
+            </tr>
+            <tr>
+                <td>Smiling Eigenface 1</td>
+                <td>Smiling Eigenface 2</td>
+                <td>Smiling Eigenface 3</td>
+                <td>Smiling Eigenface 4</td>
+            </tr>
+            <tr>
+                <td><img src="media/smiling_eigenface_4.jpg" alt="Smiling Eigenface 5"></td>
+                <td><img src="media/smiling_eigenface_5.jpg" alt="Smiling Eigenface 6"></td>
+                <td><img src="media/smiling_eigenface_6.jpg" alt="Smiling Eigenface 7"></td>
+                <td><img src="media/smiling_eigenface_7.jpg" alt="Smiling Eigenface 8"></td>
+            </tr>
+            <tr>
+                <td>Smiling Eigenface 5</td>
+                <td>Smiling Eigenface 6</td>
+                <td>Smiling Eigenface 7</td>
+                <td>Smiling Eigenface 8</td>
+            </tr>
+            <tr>
+                <td><img src="media/smiling_eigenface_8.jpg" alt="Smiling Eigenface 9"></td>
+                <td><img src="media/smiling_eigenface_9.jpg" alt="Smiling Eigenface 10"></td>
+                <td><img src="media/smiling_eigenface_10.jpg" alt="Smiling Eigenface 11"></td>
+                <td><img src="media/smiling_eigenface_11.jpg" alt="Smiling Eigenface 12"></td>
+            </tr>
+            <tr>
+                <td>Smiling Eigenface 9</td>
+                <td>Smiling Eigenface 10</td>
+                <td>Smiling Eigenface 11</td>
+                <td>Smiling Eigenface 12</td>
+            </tr>
+            <tr>
+                <td><img src="media/smiling_eigenface_12.jpg" alt="Smiling Eigenface 13"></td>
+                <td><img src="media/smiling_eigenface_13.jpg" alt="Smiling Eigenface 14"></td>
+                <td><img src="media/smiling_eigenface_14.jpg" alt="Smiling Eigenface 15"></td>
+                <td><img src="media/smiling_eigenface_15.jpg" alt="Smiling Eigenface 16"></td>
+            </tr>
+            <tr>
+                <td>Smiling Eigenface 13</td>
+                <td>Smiling Eigenface 14</td>
+                <td>Smiling Eigenface 15</td>
+                <td>Smiling Eigenface 16</td>
+            </tr>
+        </table>
+
+        <p> I chose random weights to multiply each eigenface by, and then added the weighted vectors together to generate a random face.
+        </p>
+
+        <table>
+            <tr>
+                <td><img src="media/new_neutral_face_0.jpg" alt="Random Neutral Face 1"></td>
+                <td><img src="media/new_neutral_face_1.jpg" alt="Random Neutral Face 2"></td>
+            </tr>
+            <tr>
+                <td>Random Neutral Face 1</td>
+                <td>Random Neutral Face 2</td>
+            </tr>
+            <tr>
+                <td><img src="media/new_smiling_face_0.jpg" alt="Random Smiling Face 1"></td>
+                <td><img src="media/new_smiling_face_1.jpg" alt="Random Smiling Face 2"></td>
+            </tr>
+            <tr>
+                <td>Random Smiling Face 1</td>
+                <td>Random Smiling Face 2</td>
+            </tr>
+        </table>
+</body>
