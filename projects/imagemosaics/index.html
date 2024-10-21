@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Warping and Mosaicing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+    <style>
+        body {
+            text-align: center;
+        }
+        .equation-container {
+            overflow-x: auto;
+            margin: 2em 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%; 
+            margin: 0 auto 20px; /* Center the table and add bottom margin */
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            min-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto p-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-2">Image Warping and Mosaicing</h1>
+            <h2 class="text-2xl text-gray-600">By Alec Thompson</h2>
+        </header>
+
+        <!-- Shoot the Pictures Section -->
+
+        <section class="mb-12 text-center">
+            <h2 class="text-2xl font-bold mb-4"> Overview </h2>
+            <p>
+                The goal of this project is to two or more photographs and create an image mosaic by registering, projective warping, 
+                resampling, and compositing them.
+            </p>
+        </section>
+        <section class="mb-12 text-center">
+            <h2 class="text-2xl font-bold mb-4">Shoot the Pictures</h2>
+            <p class="mb-6">
+                I took photos from the same center of projection (COP), and rotated the camera to get overlapping images. 
+                Then, I selected corresponding points across images.
+            </p>
+            <table>
+                <tr>
+                    <td>California Hall Images and Correspondences</td>
+                    <td>San Francisco Images and Correspondences</td>
+                </tr>
+                <tr>
+                    <td><img src="media/chall_correspondences.jpg" alt="California Hall"></td>
+                    <td><img src="media/sf_correspondences.jpg" alt="San Francisco"></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Recover Homographies Section -->
+        <section class="mb-12 text-center">
+            <h2 class="text-2xl font-bold mb-4">Recover Homographies</h2>
+            <p class="mb-6">
+                To align the images, we need to recover the projective transformation between them. This transformation
+                is represented by a 3x3 homography matrix with 8 degrees of freedom. Given corresponding points between
+                images, we can set up a system of equations:
+            </p>
+            <div class="equation-container">
+                $$
+                \begin{bmatrix}
+                a & b & c \\
+                d & e & f \\
+                g & h & 1
+                \end{bmatrix}
+                \begin{bmatrix}
+                x \\
+                y \\
+                1
+                \end{bmatrix} =
+                \begin{bmatrix}
+                wx' \\
+                wy' \\
+                w
+                \end{bmatrix}
+                $$
+            </div>
+            <div class="equation-container">
+                $$
+                \Rightarrow
+                \begin{cases}
+                ax + by + c = wx' \\
+                dx + ey + f = wy' \\
+                gx + hy + 1 = w
+                \end{cases}
+                $$
+            </div>
+            <div class="equation-container">
+                $$
+                \Rightarrow
+                \begin{cases}
+                ax + by + c = (gx + hy + 1)x' \\
+                dx + ey + f = (gx + hy + 1)y'
+                \end{cases}
+                $$
+            </div>
+            <div class="equation-container">
+                $$
+                \Rightarrow
+                \begin{cases}
+                ax + by + c - gxx' - hyx' = x' \\
+                dx + ey + f - gxy' - hyy' = y'
+                \end{cases}
+                $$
+            </div>
+            <div class="equation-container">
+                $$
+                \Rightarrow
+                \begin{bmatrix}
+                x & y & 1 & 0 & 0 & 0 & -xx' & -yx' \\
+                0 & 0 & 0 & x & y & 1 & -xy' & -yy'
+                \end{bmatrix}
+                \begin{bmatrix}
+                a \\
+                b \\
+                c \\
+                d \\
+                e \\
+                f \\
+                g \\
+                h
+                \end{bmatrix} =
+                \begin{bmatrix}
+                x' \\
+                y'
+                \end{bmatrix}
+                $$
+            </div>
+            <p class="mt-4">
+                For each pair of points, just stack them onto the matrix and the constant vector.  
+                If we have more than 4 pairs of points, this system is overdetermined.  
+                We can get an approximate solution using least squares.  
+            </p>
+        </section>
+
+        <!-- Warping Images Section -->
+        <section class="mb-12 text-center">
+            <h2 class="text-2xl font-bold mb-4">Warping Images</h2>
+            <p class="mb-6">
+                Using the computed homography matrix, we can warp images to align with each other. 
+                To find the warped image boundaries, I created a bounding box by transforming the original image corners using by homography matrix.
+                Sometimes, the warped corners would be negative, so I shifted the warped image so all pixels are positive.  
+                Then, I implemented inverse warping using nearest neighbor interpolation to avoid aliasing artifacts.  
+                I also used an alpha mask to make all regions without valid pixel values to the warped image transparent.  
+            </p>
+        </section>
+
+        <!-- Image Rectification Section -->
+        <section class="mb-12 text-center">
+            <h2 class="text-2xl font-bold mb-4">Image Rectification</h2>
+            <p class="mb-6">
+                I used my warped image function to rectify a picture of my book, TCP/IP Illustrated Volume 2.  
+            </p>
+            <table>
+                <tr>
+                    <td>Original Image</td>
+                    <td>Rectified Image</td>
+                </tr>
+                <tr>
+                    <td><img src="media/tcpipbook_original.jpg" alt="Original Image"></td>
+                    <td><img src="media/rectified_tcpipbook.jpg" alt="Rectified image"></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Blend the Images Section -->
+        <section class="mb-12 text-center">
+            <h2 class="text-2xl font-bold mb-4">Blend the images into a mosaic</h2>
+            <p class="mb-6">
+                I aligned the images on top of each other based on the point correspondences. 
+                Having one picture overwrite the other would lead to strong edge artifacts, so I used a weighted averaging approach for sections that overlap.
+                I computed a Euclidean distance transform of each image.  The distance transform determines each pixel's distance from the edges of the image.
+                For all sections that overlap, I set the pixel values to a weighted average of the two images, using the distance transform as the weights.
+            </p>
+            <p class="mb-6">
+                My blend function leaves one image unwarped and warps the other image into its projection.  For each blend, I tried both possible configurations.
+            </p>
+            <table>
+                <tr>
+                    <td>California Hall Images and Correspondences</td>
+                    <td>San Francisco Images and Correspondences</td>
+                </tr>
+                <tr>
+                    <td><img src="media/blended_chall1.jpg" alt="California Hall"></td>
+                    <td><img src="media/blended_chall2.jpg" alt="San Francisco"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>California Hall Images and Correspondences</td>
+                    <td>San Francisco Images and Correspondences</td>
+                </tr>
+                <tr>
+                    <td><img src="media/blended_sf1.jpg" alt="California Hall"></td>
+                    <td><img src="media/blended_sf2.jpg" alt="San Francisco"></td>
+                </tr>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+</html>
