@@ -60,10 +60,13 @@
                 <tr>
                     <td>California Hall Images and Correspondences</td>
                     <td>San Francisco Images and Correspondences</td>
+                    <td>Valley Life Sciences Building Images and Correspondences</td>
+
                 </tr>
                 <tr>
                     <td><img src="media/chall_correspondences.jpg" alt="California Hall"></td>
                     <td><img src="media/sf_correspondences.jpg" alt="San Francisco"></td>
+                    <td><img src="media/vlsb_correspondences.jpg" alt="Valley Life Sciences Building"></td>
                 </tr>
             </table>
         </section>
@@ -173,12 +176,20 @@
             </p>
             <table>
                 <tr>
-                    <td>Original Image</td>
-                    <td>Rectified Image</td>
+                    <td>Original TCP/IP Book</td>
+                    <td>Rectified TCP/IP Book</td>
                 </tr>
                 <tr>
                     <td><img src="media/tcpipbook_original.jpg" alt="Original Image"></td>
                     <td><img src="media/rectified_tcpipbook.jpg" alt="Rectified image"></td>
+                </tr>
+                <tr>
+                    <td>Original Chess Board</td>
+                    <td>Rectified Chess Board</td>
+                </tr>
+                <tr>
+                    <td><img src="media/chess_original.jpg" alt="Original Image"></td>
+                    <td><img src="media/rectified_chess.jpg" alt="Rectified image"></td>
                 </tr>
             </table>
         </section>
@@ -197,26 +208,202 @@
             </p>
             <table>
                 <tr>
-                    <td>California Hall Images and Correspondences</td>
-                    <td>San Francisco Images and Correspondences</td>
+                    <td>California Hall Mosaics</td>
+                    <td>San Francisco Mosaics</td>
+                    <td>Valley Life Science Building Mosaics</td>
                 </tr>
                 <tr>
                     <td><img src="media/blended_chall1.jpg" alt="California Hall"></td>
-                    <td><img src="media/blended_chall2.jpg" alt="San Francisco"></td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <td>California Hall Images and Correspondences</td>
-                    <td>San Francisco Images and Correspondences</td>
+                    <td><img src="media/blended_sf1.jpg" alt="San Francisco"></td>
+                    <td><img src="media/blended_vlsb1.jpg" alt="Valley Life Science Building"></td>
                 </tr>
                 <tr>
-                    <td><img src="media/blended_sf1.jpg" alt="California Hall"></td>
+                    <td><img src="media/blended_chall2.jpg" alt="California Hall"></td>
                     <td><img src="media/blended_sf2.jpg" alt="San Francisco"></td>
+                    <td><img src="media/blended_vlsb2.jpg" alt="Valley Life Science Building"></td>
                 </tr>
             </table>
         </section>
     </div>
+
+    <!-- Header -->
+    <header class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-2">Feature Matching for Autostitching</h1>
+    </header>    
+
+    <section class="mb-12 text-center">
+        <h2 class="text-2xl font-bold mb-4"> Overview </h2>
+        <p>
+            The goal of this section is to automatically select the points to warp each image.   
+            We reimplement the research paper “Multi-Image Matching using Multi-Scale Oriented Patches” by Brown et al.
+        </p>
+    </section>
+
+    <section class="mb-12 text-center">
+        <h2 class="text-2xl font-bold mb-4">Detecting corner features in an image</h2>
+        <p class="mb-6">
+            We used the Harris Interest Point Detector to find the corners of an image. 
+            A corner is the junction of two edges in an image.  
+            They are important features used for restoring image information.  
+        </p>
+        <table>
+            <tr>
+                <td>Harris corners are shown in blue</td>
+                <td>Harris matrix</td>
+            </tr>
+            <tr>
+                <td><img src="media/chall1_harris_points.jpg" alt="Harris Corners"></td>
+                <td><img src="media/chall1_harris_matrix.jpg" alt="Harris Matrix"></td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="mb-12 text-center">
+        <h2 class="text-2xl font-bold mb-4">Implementing Adaptive Non-Maximal Suppression (ANMS)</h2>
+        <p class="mb-6">
+            Looking at the Harris corners, we notice that many of them are packed close together, creating lots of redundancy.
+            To remove some of these redundant points, we will use ANMS.
+            The ANMS algorithm is simple:  
+        </p>
+        <p>
+            For every point, we find the distance to a neighboring point with a stronger corner response.
+        </p>
+        <p>
+            We will call this their 'radii'.  We order all the points by their radii. 
+        </p> 
+        <p>
+            Then, we select the first 500 points from our ordered list. 
+        </p>
+        <p>
+            The points towards the back of the list have weak corner responses
+            compared to their neighbors, and are therefore suppressed.  The points at the front of the list have strong corner responses 
+            and no close stronger neighbors.
+        </p>
+        <p>
+
+        </p>
+        <table>
+            <tr>
+                <td>Harris and ANMS points.  Harris points are shown in blue, and ANMS points are shown in purple.</td>
+            </tr>
+            <tr>
+                <td><img src="media/chall1_anms_points.jpg" alt="Harris and ANMS points"></td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="mb-12 text-center"></section>
+        <h2 class="text-2xl font-bold mb-4">Extracting a Feature Descriptor for each feature point</h2>
+        <p class="mb-6">
+            For each point, we extract a feature descriptor to be used for feature matching.    
+        </p>
+        <p>
+            We select a 40x40 pixel square around the point.  
+            Then, we blur the image using a Gaussian filter, and downsize it to be a 8x8 pixels.  
+            The feature descriptor is then normalized by setting the mean to zero and the standard deviation to one.  
+        </p>
+        <table>
+            <tr>
+                <td>Sample Feature Descriptors</td>
+            </tr>
+            <tr>
+                <td><img src="media/chall1_feature_descriptors.jpg" alt="Feature Descriptors"></td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="mb-12 text-center"></section>
+        <h2 class="text-2xl font-bold mb-4">Feature Matching</h2>
+        <p class="mb-6">
+            We compute the ANMS points for each image we want to stitch together, and their associated feature descriptors.
+        </p>
+        <p>
+            For each feature descriptor in image one, we find its two nearest neighbors in image two.  
+            We will validate matches based on Lowe's ratio.  
+            If the distance to the first nearest neighbor divided by the distance to the second nearest neighbor is below
+            a certain threshold, we are reasonably confident that this is the correct match.  If the ratio is above the 
+            threshold, we assume that both the first nearest neighbor and the second nearest neighbor are incorrect matches,
+            and the feature descriptor has no match.
+        </p>
+        <table>
+            <tr>
+                <td>Matches using Lowe's ratio</td>
+            </tr>
+            <tr>
+                <td><img src="media/chall_auto_correspondences.jpg" alt="Matches using Lowe's ratio"></td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="mb-12 text-center"></section>
+        <h2 class="text-2xl font-bold mb-4">Removing outliers using Random sample consensus (RANSAC)</h2>
+        <p class="mb-6">
+            Our feature matching system contains some incorrect matches.  Unfortunately, the L2 norm is not robust against these outliers,
+            and the resulting homography can be skewed significantly from these incorrect matches.  To combat this, we will use RANSAC.
+        </p>
+        <p>
+            RANSAC randomly samples four points from the first image, computes the homography on just these four points, 
+            and determines how many warped points correctly line up with their corresponding point in the other image.  
+            We will call these points the inliers.  We repeat this process for a set number of iterations, and keep track
+            of the largest group of inliers.  
+        </p>
+        <p>
+            We will compute the final homography matrix on these inliers, and then blend the images together automatically.
+        </p>
+        <table>
+            <tr>
+                <td>All point correspondences in red/yellow and RANSAC point correspondences in blue/green</td>
+            </tr>
+            <tr>
+                <td><img src="media/chall_ransac.jpg" alt="All point correspondences in red/yellow and RANSAC point correspondences in blue/green"></td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="mb-12 text-center"></section>
+        <h2 class="text-2xl font-bold mb-4">Results (Manual vs Automatic)</h2>
+        <p class="mb-6">
+            Below are the results of manually selecting correspondences, versus automatically selecting them using the algorithm described above.
+        </p>
+        <table>
+            <tr>
+                <td>Manual Mosaic of California Hall</td>
+                <td>Automatic Mosaic of California Hall</td>
+            </tr>
+            <tr>
+                <td><img src="media/blended_chall1.jpg" alt="Manual Mosaic Of California Hall"></td>
+                <td><img src="media/auto_blended_chall1.jpg" alt="Automatic Mosaic Of California Hall"></td>
+            </tr>
+            <tr>
+                <td><img src="media/blended_chall2.jpg" alt="Manual Mosaic Of California Hall"></td>
+                <td><img src="media/auto_blended_chall2.jpg" alt="Automatic Mosaic Of California Hall"></td>
+            </tr>
+            <tr>
+                <td>Manual Mosaic of San Francisco</td>
+                <td>Automatic Mosaic of San Francisco</td>
+            </tr>
+            <tr>
+                <td><img src="media/blended_sf1.jpg" alt="Manual Mosaic Of San Francisco"></td>
+                <td><img src="media/auto_blended_sf1.jpg" alt="Automatic Mosaic Of San Francisco"></td>
+            </tr>
+            <tr>
+                <td><img src="media/blended_sf2.jpg" alt="Manual Mosaic Of San Francisco"></td>
+                <td><img src="media/auto_blended_sf2.jpg" alt="Automatic Mosaic Of San Francisco"></td>
+            </tr>
+            <tr>
+                <td>Manual Mosaic of Valley Life Sciences Building</td>
+                <td>Automatic Mosaic of Valley Life Sciences Building</td>
+            </tr>
+            <tr>
+                <td><img src="media/blended_vlsb1.jpg" alt="Manual Mosaic Of Valley Life Sciences Building"></td>
+                <td><img src="media/auto_blended_vlsb1.jpg" alt="Automatic Mosaic Of Valley Life Sciences Building"></td>
+            </tr>
+            <tr>
+                <td><img src="media/blended_vlsb2.jpg" alt="Manual Mosaic Of Valley Life Sciences Building"></td>
+                <td><img src="media/auto_blended_vlsb2.jpg" alt="Automatic Mosaic Of Valley Life Sciences Building"></td>
+            </tr>
+        </table>
+    </section>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
