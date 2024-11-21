@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #666;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        h4 {
+            color: #666;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px; /* Space between images */
+            margin: 20px 0;
+        }
+
+        .image-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .image-wrapper img {
+            display: block;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .image-caption {
+            color: #666;
+            font-style: italic;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+
+        /* Additional responsive design for side-by-side images */
+        @media (max-width: 800px) {
+            .image-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Fun With Diffusion Models!</h1>
+    <h3>Alec Thompson</h3>
+
+    <h2> Part A: The Power of Diffusion Models!</h2>
+
+    <h3> Setup</h3>
+    <div class="setup">
+        <p>Generate images based on text embeddings.  I am using seed 180.</p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/snowy_mountain_village.png" alt="First Image" style="width: 256px; height: 256px;">
+            <div class="image-caption">an oil painting of a snowy mountain village</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/man_wearing_hat.png" alt="Second Image" style="width: 256px; height: 256px;">
+            <div class="image-caption">a man wearing a hat</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/rocket_ship.png" alt="Third Image" style="width: 256px; height: 256px;">
+            <div class="image-caption">a rocket ship</div>
+        </div>
+    </div>
+
+    <h3> Sampling Loops </h3>
+    <h4> Implementing the Forward Process</h4>
+    <div class="forwardprocess">
+        <p>A key part of diffusion is the forward process, which takes a clean image and adds noise to it. </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/campanile_noising_process.jpg" alt="First Image" style="width: 1000px; height: auto;">
+            <div class="image-caption">Campanile Noising Process</div>
+        </div>
+    </div>
+
+    <h4> Classical Denoising </h4>
+    <div class="classicaldenoising">
+        <p> Let's try to denoise these images using classical methods.  We will use Gaussian blur filtering to try to remove the noise. 
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/campanile_gaussian_denoising_process.jpg" alt="First Image" style="width: 600px; height: auto;">
+            <div class="image-caption">Gaussian Denoising Process</div>
+        </div>
+    </div>
+
+    <h4> One-Step Denoising </h4>
+    <div class="classicaldenoising">
+        <p> Now, we'll use a pretrained diffusion model to denoise. 
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/campanile_one_step_denoising_t250.png" alt="First Image" style="width: 600px; height: auto;">
+            <div class="image-caption">Noisy image at t=250</div>
+        </div>
+       
+        <div class="image-wrapper">
+            <img src="media/campanile_one_step_denoising_t500.png" alt="First Image" style="width: 600px; height: auto;">
+            <div class="image-caption">Noisy image at t=500</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/campanile_one_step_denoising_t750.png" alt="First Image" style="width: 600px; height: auto;">
+            <div class="image-caption">Noisy image at t=750</div>
+        </div>
+    </div>
+
+    <h4> Iterative Denoising </h4>
+    <div class="classicaldenoising">
+        <p> In one-step denoising, you should see that the denoising UNet does a much better job of projecting 
+            the image onto the natural image manifold, but it does get worse as you add more noise. 
+            This makes sense, as the problem is much harder with more noise!
+            But diffusion models are designed to denoise iteratively. In this part we will implement this.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/campanile_iterative_denoising_process.jpg" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">Iterative Denoising Process</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/campanile_denoising_comparison.jpg" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">Denoising Process Comparison</div>
+        </div>
+    </div>
+
+    <h4> Diffusion Model Sampling </h4>
+    <div class="classicaldenoising">
+        <p> In the previous part, we use the diffusion model to denoise an image. 
+            Another thing we can do with the iterative_denoise function is to generate images from scratch. 
+            We can do this by setting i_start = 0 and passing in random noise. 
+            This effectively denoises pure noise. We will use the prompt, "a high quality photo".
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/iterative_denoise_sampling.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">Iterative Denoise Sampling</div>
+        </div>
+    </div>
+
+    <h4> Classifier-Free Guidance (CFG) </h4>
+    <div class="classicaldenoising">
+        <p> We now generate images using classifier-free guidance. 
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/cfg_denoise_sampling.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption"></div>
+        </div>
+    </div>
+
+    <h4> Image-to-image Translation </h4>
+    <div class="classicaldenoising">
+        <p> We're going to take the original test image, noise it a little, and force it back onto the image manifold 
+            without any conditioning. Effectively, we're going to get an image that is similar to the test image 
+            (with a low-enough noise level). This follows the SDEdit algorithm.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/sdedit_campanile.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">SDEdit Campanile</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/sdedit_golden_gate.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">SDEdit Golden Gate Bridge</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/sdedit_eiffel_tower.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">SDEdit Eiffel Tower</div>
+        </div>
+    </div>
+
+    <h4> Editing Hand-Drawn and Web Images </h4>
+    <div class="classicaldenoising">
+        <p> This procedure works particularly well if we start with a nonrealistic image (e.g. painting, a sketch, some scribbles) 
+            and project it onto the natural image manifold.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/sdedit_crab.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">SDEdit Crab Clipart</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/sdedit_drawn_car.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">SDEdit Drawn Car</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/sdedit_drawn_tree.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">SDEdit Drawn Tree</div>
+        </div>
+    </div>
+
+    <h4> Inpainting </h4>
+    <div class="classicaldenoising">
+        <p> We can use the same procedure to implement inpainting (following the RePaint paper).  
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/inpainting.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">Inpainting Examples</div>
+        </div>
+    </div>
+
+    <h4> Text-Conditional Image-to-image Translation </h4>
+    <div class="classicaldenoising">
+        <p> Now, we will do the same thing as SDEdit, but guide the projection with a text prompt. 
+            This is no longer pure "projection to the natural image manifold" but also adds control using language. 
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/rocket_campanile.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">Rocket Ship to Campanile</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/rocket_golden_gate.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">Rocket Ship to Golden Gate Bridge</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/rocket_eiffel_tower.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">Rocket Ship to Eiffel Tower</div>
+        </div>
+    </div>
+
+    <h4> Visual Anagrams </h4>
+    <div class="classicaldenoising">
+        <p> Visual anagrams can be created by making our noise estimate the average of the noise estimates of two different prompts.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/flip_illusions.png" alt="First Image" style="width: 800px; height: auto;">
+            <div class="image-caption">Visual Anagrams</div>
+        </div>
+    </div>
+
+    <h4> Hybrid Images </h4>
+    <div class="classicaldenoising">
+        <p> Hybrid images can be created by making our noise estimate the low pass noise estimate of 
+            one prompt added to the high pass noise estimate of another prompt.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/hybrid_images.png" alt="First Image" style="width: 800px; height: auto;">
+            <div class="image-caption">Hybrid Images</div>
+        </div>
+    </div>
+
+    <h2> 
+        Part B: Diffusion Models from Scratch!
+    </h2>
+
+    <h3>Training a Single-Step Denoising UNet</h3>
+
+    <h4>Implementing the UNet</h4>
+    
+    <div class="classicaldenoising">
+        <p> In this project, we implement the denoiser as a UNet. 
+            It consists of a few downsampling and upsampling blocks with skip connections.
+        </p>
+    </div>
+
+    <h4> Using the UNet to Train a Denoiser</h4>
+
+    <div class="classicaldenoising">
+        <p> Given a noisy image, we will train a denoiser to map it back to the clean image, optimizing using the L2 loss function.
+            We will visualize the noising process over time.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/noising_process.jpg" alt="First Image" style="width: 800px; height: auto;">
+            <div class="image-caption">Adding noise to a clean image</div>
+        </div>
+    </div>
+
+    <h4> Training</h4>
+
+    <div class="classicaldenoising">
+        <p> Now, we will train the model to perform denoising.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/unconditional_loss_curve.jpg" alt="First Image" style="width: 600px; height: auto;">
+            <div class="image-caption">Unconditional Training UNet Loss Curve</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/unconditional_denoising_epoch_1.jpg" alt="Second Image" style="width: 400px; height: auto;">
+            <div class="image-caption">Denoising Process at Epoch 1</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/unconditional_denoising_epoch_5.jpg" alt="Third Image" style="width: 400px; height: auto;">
+            <div class="image-caption">Denoising Process at Epoch 5</div>
+        </div>
+    </div>
+
+    <h4> Out-of_Distribution Testing</h4>
+
+    <div class="classicaldenoising">
+        <p> Our denoiser was training on MNIST digits noised with sigma=0.5.
+            Let's see how the denoiser performs on different sigma's that it wasn't trained for.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/unconditional_out_of_distribution_testing.jpg" alt="First Image" style="width: 800px; height: auto;">
+            <div class="image-caption">Denoising process on different noise levels</div>
+        </div>
+    </div>
+
+    <h3> Training a Diffusion Model</h3>
+
+    <h4> Adding Time Conditioning to UNet </h4>
+
+    <div class="classicaldenoising">
+        <p> We need a way to inject scalar t (time)
+            into our UNet model to condition it.
+        </p>
+    </div>
+
+    <h4> Training the UNet </h4>
+
+    <div class="classicaldenoising">
+        <p> Training our time-conditioned UNet 
+            is now pretty easy. Basically, we pick a random image from the training set, a random t
+           , and train the denoiser to predict the noise.
+            We repeat this for different images and different t
+            values until the model converges and we are happy.
+           
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/time_conditional_loss_curve.jpg" alt="First Image" style="width: 600px; height: auto;">
+            <div class="image-caption">Time Conditional Training UNet Loss Curve</div>
+        </div>
+    </div>
+
+    <h4> Sampling from the UNet </h4>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/time_conditional_denoising_epoch_5.jpg" alt="First Image" style="width: 800px; height: auto;">
+            <div class="image-caption">Denoising Process at Epoch 5</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/time_conditional_denoising_epoch_20.jpg" alt="First Image" style="width: 800px; height: auto;">
+            <div class="image-caption">Denoising Process at Epoch 20</div>
+        </div>
+    </div>
+
+    <h4> Adding Class-Conditioning to UNet </h4>
+
+    <div class="classicaldenoising"></div>
+        <p> To make the results better and give us more control for image generation, 
+            we can also optionally condition our UNet on the class of the digit 0-9.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/class_conditional_loss_curve.jpg" alt="First Image" style="width: 600px; height: auto;">
+            <div class="image-caption">Class Conditional Training UNet Loss Curve</div>
+        </div>
+    </div>
+
+    <h4> Sampling from the Class-Conditioned UNet </h4>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/class_conditional_denoising_epoch_5.jpg" alt="First Image" style="width: 800px; height: auto;">
+            <div class="image-caption">Class Conditional Training UNet Loss Curve</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/class_conditional_denoising_epoch_20.jpg" alt="First Image" style="width: 800px; height: auto;">
+            <div class="image-caption">Class Conditional Training UNet Loss Curve</div>
+        </div>
+    </div>
+
+</body>
+</html>

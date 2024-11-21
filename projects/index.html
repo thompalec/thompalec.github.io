@@ -63,6 +63,20 @@
                     </p>
                 </div>
             </div>
+            <div class="project-item"></div>
+                <img src="media/imagemosaics.jpg" alt="Autostitching Photo Mosaics" class="project-image">
+                <div class="project-info">
+                    <h2><a href="https://thompalec.github.io/projects/imagemosaics">Autostitching Photo Mosaics</a></h2>
+                    <p>Images of faces are aligned by selecting corresponding points between them, i.e. eyes to eyes, mouth to mouth, 
+                        chin to chin, ears to ears, etc.  We can compute the Delaunay triangulation across these points, and find the 
+                        mean point set between two images.  Then, we use the affine transformation matrix to warp each triangle 
+                        from the original image to the new average shape.  We interpolate pixel values using an inverse-warp.  In this 
+                        project, I produced a "morph" animation of two different faces, computed the mean of a population of faces,
+                        and extrapolated from a population mean to create a caricature of myself.  I created a facial coordinate space and
+                        used Principal Component Analysis to find the eigenvectors with the largest singular values.
+                    </p>
+                </div>
+            </div>
         </div>
     </main>
 
