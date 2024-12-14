@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #666;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        h4 {
+            color: #666;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px; /* Space between images */
+            margin: 20px 0;
+        }
+
+        .image-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 0px;
+        }
+
+        .image-wrapper img {
+            display: block;
+            object-fit: cover;
+            margin-bottom: 0px;
+        }
+
+        .image-caption {
+            color: #666;
+            font-style: italic;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+
+        /* Additional responsive design for side-by-side images */
+        @media (max-width: 800px) {
+            .image-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Neural Radiance Fields</h1>
+    <h3>Alec Thompson</h3>
+
+    <h2> Part 1: Fit a Neural Field to a 2D Image    </h2>
+
+    <div> 
+        <p> We will develop a multilayer perceptron (MLP) to predict pixel rgb values given pixel coordinates on a 2D image, as a proof of concept.
+            The architecture of our MLP is described below:
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/simple_mlp.png" alt="First Image" style="width: 500px; height: auto;">
+            <div class="image-caption">Multilayer Perceptron (MLP) network architecture</div>
+        </div>
+    </div>
+
+    <div>
+        <p> 
+            We implement Sinusoidal Positional Encoding (PE) in order to expand the dimensionality of our input coordinates.  
+            This is because neural networks are generally bad at predicting high frequency features.  Mapping the 
+            coordinates to a higher dimensional space using high frequency functions improves the MLP's ability to 
+            learn high frequency data.  
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/pe.png" alt="First Image" style="width: 650px; height: auto;">
+            <div class="image-caption">Sinusoidal Positional Encoding formation </div>
+        </div>
+    </div>
+
+    <h3> Results </h3>
+
+    <div>
+        <p>
+            I trained my network on a picture of a fox and a picture of a melting watch using mean squared error loss (MSE) as the loss function. 
+            I implement a dataloader that randomly samples 10,000 pixels at every iteration for training, because sampling all the pixels
+            in a high definition image is computationally infeasible.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/fox.jpg" alt="First Image" style="width: auto; height: 250px;">
+            <div class="image-caption">Original Fox Image </div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/watch.jpg" alt="First Image" style="width: auto; height: 250px;">
+            <div class="image-caption">Original Melting Watch Image </div>
+        </div>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/train_fox_1.png" alt="First Image" style="width: 650px; height: auto;">
+        </div>
+        <div class="image-wrapper">
+            <img src="media/graph_fox_1.png" alt="Second Image" style="width: 200px; height: auto;">
+        </div>
+        <div class="image-caption">Fox, Default Hyperparameters</div>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/train_fox_2.png" alt="First Image" style="width: 650px; height: auto;">
+        </div>
+        <div class="image-wrapper">
+            <img src="media/graph_fox_2.png" alt="Second Image" style="width: 200px; height: auto;">
+        </div>
+        <div class="image-caption">Fox, Learning Rate Set to 1e-4</div>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/train_fox_3.png" alt="First Image" style="width: 650px; height: auto;">
+        </div>
+        <div class="image-wrapper">
+            <img src="media/graph_fox_3.png" alt="Second Image" style="width: 200px; height: auto;">
+        </div>
+        <div class="image-caption">Fox, No Sinusoidal Positional Embedding</div>
+    </div>
+
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/train_watch_1.png" alt="First Image" style="width: 650px; height: auto;">
+        </div>
+        <div class="image-wrapper">
+            <img src="media/graph_watch_1.png" alt="Second Image" style="width: 200px; height: auto;">
+        </div>
+        <div class="image-caption">The Melting Watch, Default Hyperparameters</div>
+    </div>
+
+    <h2> Part 2: Fit a Neural Radiance Field from Multi-view Images    </h2>
+    
+    <h3> Part 2.1: Create Rays from Cameras </h3>
+    <div>
+        <p> We need three functions to help create rays from the various photographs.  
+            The first function transforms from the camera space to the world space.  
+            This is useful for determining where the rays will actually end up in the world view.
+
+            The second function converts from a pixel to a camera coordinate, and the third function
+            converts a pixel to a ray.
+        </p>
+    </div>
+
+    <h3> Part 2.2: Sampling </h3>
+
+    <div>
+        <p> 
+            I implemented two functions for my dataloader.  One function is designed to sample a random set of rays from all of the images.
+            The other samples random points across a set of rays.  These functions will be used to train our neural radiance field.
+        </p>
+    </div>
+
+    <h3> Part 2.3: Putting the Dataloading All Together </h3>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/all_rays.png" alt="First Image" style="width: 300px; height: auto;">
+            <div class="image-caption">Random assortment of rays </div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/image_rays.png" alt="Second Image" style="width: 300px; height: auto;">
+            <div class="image-caption">Rays from one camera</div>
+        </div>
+        <div class="image-wrapper">
+            <img src="media/top_left_rays.png" alt="Second Image" style="width: 300px; height: auto;">
+            <div class="image-caption">Rays from the top left of one camera</div>
+        </div>
+    </div>
+
+    <h3> Part 2.4: Neural Radiance Field </h3>
+
+    <div>
+        <p>
+            In part 1, we built a simple MLP that predicted pixel rgb values from coordinates.  
+            Now, we will build a new MLP that can predict pixel rgb values and opacity from 3D world coordinates and a 
+            ray direction.  As this is a more complicated problem, we will need more layers in our MLP.  The architecture I used is 
+            detailed below:
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/complex_mlp.png" alt="First Image" style="width: 700px; height: auto;">
+            <div class="image-caption">Neural Radiance Fields (NeRF) network architecture</div>
+        </div>
+    </div>
+
+    <h3> Part 2.5: Volume Rendering </h3>
+
+    <div>
+        <p>
+            We now have a bunch of points along a ray with corresponding rgb and opacity values.  But how do we get the actual pixel value 
+            from this?  We use volume rendering, and add up all the pixel values along the ray, weighted by the probability of the ray terminating at
+            the given location.
+        </p>
+    </div>
+
+    <h3> Results </h3>
+
+    <h4> Hyperparameters Used </h4>
+    <div>
+        <p>
+            I trained my model for 3000 epochs, with a batch size of 10,000 rays.  I used the Adam optimizer and my learning rate was 5e-4 to start.
+            Unfortunately, my network struggled to render the full image.  I believe that the problem was with mismatched uv coordinates, causing 
+            the rays and pixels to go out of alignment.  I did not have time to fix this error before the project was due.
+        </p>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/train_bulldozer.png" alt="First Image" style="width: 900px; height: auto;">
+            <div class="image-caption">Optimizing the Network over Time</div>
+        </div>
+    </div>
+
+    <div class="image-container">
+        <div class="image-wrapper">
+            <img src="media/graph_bulldozer.png" alt="First Image" style="width: 500px; height: auto;">
+            <div class="image-caption">PSNR vs Epochs</div>
+        </div>
+    </div>
+
+
+    <div class="image-container"></div>
+        <div class="image-wrapper">
+            <img class="gif" src="media/bulldozer_gif.gif" style="width: 500px; height: auto;">
+        </div>
+    </div>
+
+</body>
